@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 @Component
 public class QiniuUtils {
 
-    public static  final String url = "http://ssj1i3bs0.hd-bkt.clouddn.com/";
+    public static  final String url = "http://suotpk36w.hn-bkt.clouddn.com/";
 
     @Value("${qiniu.accessKey}")
     private  String accessKey;

@@ -19,28 +19,31 @@ public class CategoryController {
 
     /**
      * 获取文章分类
+     *
      * @return
      */
     @GetMapping
-    public Result getCategories(){
+    public Result getCategories() {
         return categoryService.findAllCategory();
     }
 
     /**
      * 导航文章分类
+     *
      * @return
      */
     @GetMapping("/detail")
-    public Result findAllCategoryDetails(){
+    public Result findAllCategoryDetails() {
         return categoryService.findAllCategoryDetails();
     }
 
     /**
      * 实现点进文章分类后, 在文章列表上面显示当前分类的信息
+     *
      * @return
      */
     @GetMapping("/detail/{id}")
-    public Result findCategoryDetailsById(@PathVariable ("id") Long id){
+    public Result findCategoryDetailsById(@PathVariable("id") Long id) {
         return categoryService.findCategoryDetailsById(id);
     }
 }

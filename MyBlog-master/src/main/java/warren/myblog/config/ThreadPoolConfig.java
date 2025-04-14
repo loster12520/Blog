@@ -7,6 +7,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
+/**
+ * 线程池配置
+ *
+ * @author Warren
+ */
 @Configuration
 @EnableAsync
 public class ThreadPoolConfig {

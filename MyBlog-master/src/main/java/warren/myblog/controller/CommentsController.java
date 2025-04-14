@@ -22,23 +22,26 @@ public class CommentsController {
 
     /**
      * 根据文章id查询评论列表
+     *
      * @param id
      * @return
      */
     @GetMapping("/article/{id}")
-    public Result comments(@PathVariable("id") Long id){
+    public Result comments(@PathVariable("id") Long id) {
         return commentsService.CommentsByArticlId(id);
     }
 
     /**
      * 评论功能
+     *
      * @param commentParam
      * @return
      */
     @PostMapping("/create/change")
-    public Result comment(@RequestBody CommentParam commentParam){
+    public Result comment(@RequestBody CommentParam commentParam) {
         return commentsService.comment(commentParam);
     }
+
     /**
      * 删除评论功能
      * 仅评论所属文章作者 或 评论作者 可以删除

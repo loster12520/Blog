@@ -8,12 +8,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import warren.myblog.common.LoginInterceptor;
 import warren.myblog.common.UserThreadLocal;
 
+/**
+ * 网络配置
+ *
+ * @author Warren
+ */
 @Configuration
 public class WebMVCConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private LoginInterceptor loginInterceptor;
+    public WebMVCConfig(LoginInterceptor loginInterceptor) {
+        this.loginInterceptor = loginInterceptor;
+    }
 
+    private final LoginInterceptor loginInterceptor;
+
+    /**
+     * 配置跨域
+     *
+     * @param registry 跨域注册表
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // 如果仅需允许 http://localhost:8080，可以在这里指定
@@ -29,6 +42,11 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
+    /**
+     * 增加登录拦截器
+     *
+     * @param registry 拦截器注册表
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)

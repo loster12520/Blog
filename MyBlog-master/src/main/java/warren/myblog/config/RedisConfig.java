@@ -14,6 +14,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * 配置Redis
+ * @author Warren
+ */
 @Configuration
 public class RedisConfig {
 
@@ -21,9 +25,6 @@ public class RedisConfig {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
-
-        // 创建 Jackson2JsonRedisSerializer
-        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
 
         // 处理 Long 类型转 String，避免前端精度丢失
@@ -36,7 +37,8 @@ public class RedisConfig {
         objectMapper.getSerializerProvider().setNullValueSerializer(ToStringSerializer.instance);
         objectMapper.addMixIn(Long.class, LongToStringMixIn.class);
 
-        serializer.setObjectMapper(objectMapper);
+        // 创建 Jackson2JsonRedisSerializer
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,Object.class);
 
         // 设置 RedisTemplate 的序列化方式
         template.setKeySerializer(new StringRedisSerializer()); // Key 采用 String 序列化

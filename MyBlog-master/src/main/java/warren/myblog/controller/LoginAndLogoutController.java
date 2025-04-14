@@ -15,20 +15,24 @@ public class LoginAndLogoutController {
 
     @Autowired
     private LoginService loginService;
+
     /**
      * 登录
+     *
      * @return
      */
     @PostMapping("/login")
-    public Result login(@RequestBody LoginParams loginParams){
+    public Result login(@RequestBody LoginParams loginParams) {
         return loginService.login(loginParams);
     }
+
     /**
      * 退出登录
+     *
      * @return
      */
     @GetMapping("/logout")
-    public Result logout(@RequestHeader("Authorization") String token){
+    public Result logout(@RequestHeader("Authorization") String token) {
         return loginService.logout(token);
     }
 }

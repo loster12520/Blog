@@ -2,7 +2,6 @@ package warren.myblog.aop;
 
 
 import com.alibaba.fastjson2.JSON;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -16,51 +15,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import warren.myblog.common.Result;
+
 import java.lang.reflect.Method;
 import java.time.Duration;
 
 
 /**
  * 使用aop实现缓存优化
+ * @author Warren
  */
 @Aspect
 @Component
 public class CacheAspect {
 
-    private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
+    private static final Logger log = LoggerFactory.getLogger(CacheAspect.class);
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     @Pointcut("@annotation(warren.myblog.aop.Cache)")
-    public void pt(){}
+    public void pt() {
+    }
 
     @Around("pt()")
-    public Object around(ProceedingJoinPoint pjp){
+    public Object around(ProceedingJoinPoint proceedingJoinPoint) {
         try {
-            Signature signature = pjp.getSignature();
+            Signature signature = proceedingJoinPoint.getSignature();
             //类名
-            String className = pjp.getTarget().getClass().getSimpleName();
+            String className = proceedingJoinPoint.getTarget().getClass().getSimpleName();
             //调用的方法名
             String methodName = signature.getName();
 
 
-            Class[] parameterTypes = new Class[pjp.getArgs().length];
-            Object[] args = pjp.getArgs();
+            Class[] parameterTypes = new Class[proceedingJoinPoint.getArgs().length];
+            Object[] args = proceedingJoinPoint.getArgs();
             //参数
-            String params = "";
-            for(int i=0; i<args.length; i++) {
-                if(args[i] != null) {
-                    params += JSON.toJSONString(args[i]);
+            StringBuilder params = new StringBuilder();
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] != null) {
+                    params.append(JSON.toJSONString(args[i]));
                     parameterTypes[i] = args[i].getClass();
-                }else {
+                } else {
                     parameterTypes[i] = null;
                 }
             }
-            if (StringUtils.isNotEmpty(params)) {
+            if (StringUtils.isNotEmpty(params.toString())) {
                 //加密 以防出现key过长以及字符转义获取不到的情况
-                params = DigestUtils.md5Hex(params);
+                params = new StringBuilder(DigestUtils.md5Hex(params.toString()));
             }
-            Method method = pjp.getSignature().getDeclaringType().getMethod(methodName, parameterTypes);
+            Method method = proceedingJoinPoint.getSignature().getDeclaringType().getMethod(methodName, parameterTypes);
             //获取Cache注解
             Cache annotation = method.getAnnotation(Cache.class);
             //缓存过期时间
@@ -68,20 +70,20 @@ public class CacheAspect {
             //缓存名称
             String name = annotation.name();
             //先从redis获取
-            String redisKey = name + "::" + className+"::"+methodName+"::"+params;
+            String redisKey = name + "::" + className + "::" + methodName + "::" + params;
             String redisValue = redisTemplate.opsForValue().get(redisKey);
-            if (StringUtils.isNotEmpty(redisValue)){
-                log.info("走了缓存~~~,{},{}",className,methodName);
+            if (StringUtils.isNotEmpty(redisValue)) {
+                log.info("走了缓存~~~,{},{}", className, methodName);
                 return JSON.parseObject(redisValue, Result.class);
             }
-            Object proceed = pjp.proceed();
-            redisTemplate.opsForValue().set(redisKey,JSON.toJSONString(proceed), Duration.ofMillis(expire));
-            log.info("存入缓存~~~ {},{}",className,methodName);
+            Object proceed = proceedingJoinPoint.proceed();
+            redisTemplate.opsForValue().set(redisKey, JSON.toJSONString(proceed), Duration.ofMillis(expire));
+            log.info("存入缓存~~~ {},{}", className, methodName);
             return proceed;
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            log.warn(throwable.getMessage());
         }
-        return Result.fail(-999,"系统错误");
+        return Result.fail(-999, "系统错误");
     }
 
 }

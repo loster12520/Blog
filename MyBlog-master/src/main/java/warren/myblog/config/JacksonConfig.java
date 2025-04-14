@@ -1,12 +1,5 @@
 package warren.myblog.config;
 
-/*
- * author: Warren
- */
-/**
- * 解决前端转化java long类型时丢失精度的问题
- */
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -16,6 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+/**
+ * 解决前端转化java long类型时丢失精度的问题
+ *
+ * @author Warren
+ */
 @Configuration
 public class JacksonConfig {
 

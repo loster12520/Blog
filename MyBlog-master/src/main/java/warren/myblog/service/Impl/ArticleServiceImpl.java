@@ -121,7 +121,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Result viewArticleById(Long id) {
         //1.根据id查询文章信息
-        //2.根据bodyid和categoryid查询文章详情
+        //2.根据bodyId和categoryId查询文章详情
         Article article = this.articleMapper.selectById(id);
 
         threadService.updateViewCount(articleMapper, article);
@@ -133,18 +133,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 发布文章
+     * <li>发布文章就是构建 article对象</li>
+     * <li>authorId 就是当前登录用户的id</li>
+     * <li>拿到标签 发布文章后会生成一个文章id 这时需要将标签和文章关联起来</li>
+     * <li>存储文章内容body</li>
      *
      * @param articleParam
      * @return
      */
     @Override
     public Result publish(ArticleParam articleParam) {
-        /**
-         * 1.发布文章就是构建 article对象
-         *  2. authorId 就是当前登录用户的id
-         *  3.拿到标签 发布文章后会生成一个文章id 这时需要将标签和文章关联起来
-         *  4.存储文章内容body
-         */
         //获取当前登录的用户,即发布文章的作者
         SysUser sysUser = UserThreadLocal.get();
 
@@ -202,12 +200,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 删除
+     *
      * @param ids
      * @return
      */
     @Override
     public Result deleteArticles(List<Long> ids) {
-         if (ids == null || ids.isEmpty()) {
+        if (ids == null || ids.isEmpty()) {
             return Result.fail(PARAMS_ERROR.getCode(), "没有需要删除的文章");
         }
 
@@ -230,7 +229,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @param id
      * @return
      */
-
 
 
     /**
@@ -324,6 +322,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 搜索文章
+     *
      * @param search
      * @return
      */
@@ -331,11 +330,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Result searchArticle(String search) {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByDesc(Article::getViewCounts);
-        queryWrapper.select(Article::getId,Article::getTitle);
-        queryWrapper.like(Article::getTitle,search);
+        queryWrapper.select(Article::getId, Article::getTitle);
+        queryWrapper.like(Article::getTitle, search);
         //select id,title from article order by view_counts desc limit 5
         List<Article> articles = articleMapper.selectList(queryWrapper);
 
-        return Result.success(copyList(articles,false,false));
+        return Result.success(copyList(articles, false, false));
     }
 }
