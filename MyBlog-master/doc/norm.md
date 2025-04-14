@@ -26,7 +26,7 @@
         - 405 Method Not Allowed：方法不允许，服务器没有该方法
         - 406 Not Acceptable - [GET]：用户请求的格式不可得（比如用户请求JSON格式，但是只有XML格式）
         - 410 Gone -[GET]：用户请求的资源被永久删除，且不会再得到的
-        - 422 Unprocesable entity - [POST/PUT/PATCH]:当创建一个对象时，发生一个验证错误
+        - 422 Unprocessable entity - [POST/PUT/PATCH]:当创建一个对象时，发生一个验证错误
         - 500 INTERNAL SERVER ERROR - [*]:服务器发生错误，用户将无法判断发出的请求是否成功
     - 举个例子：
       - 在ArticleController里面，对article的增删改查操作
@@ -42,7 +42,3 @@
   - 需要管理员权限的接口使用`/admin`作为前缀
 
 ---
-
-### 函数名
-
-- 
