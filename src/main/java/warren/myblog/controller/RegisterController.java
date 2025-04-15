@@ -1,5 +1,6 @@
 package warren.myblog.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,7 @@ import warren.myblog.service.RegisterService;
  * author: Warren
  */
 @RestController
-@RequestMapping("/pulic/register")
+@RequestMapping
 public class RegisterController {
 
     @Autowired
@@ -21,10 +22,11 @@ public class RegisterController {
 
     /**
      * 注册
-     * @param sysUser
+     * @param sysUser 用户对象
      * @return
      */
-    @PostMapping
+    @Operation(tags = "注册")
+    @PostMapping("/pulic/register")
     public Result register(@RequestBody SysUser sysUser){
         return registerService.register(sysUser);
     }

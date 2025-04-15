@@ -1,5 +1,6 @@
 package warren.myblog.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +17,14 @@ import java.util.UUID;
  * author: Warren
  */
 @RestController
-@RequestMapping("/user/upload")
+@RequestMapping
 public class UploadController {
 
     @Autowired
     private QiniuUtils qiniuUtils;
 
-    @PostMapping
+    @Operation(tags="上传图片")
+    @PostMapping("/user/upload")
     public Result upload(@RequestParam("image") MultipartFile file) {
         String fileName = UUID.randomUUID().toString() + "." + StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
         boolean upload = qiniuUtils.upload(file, fileName);

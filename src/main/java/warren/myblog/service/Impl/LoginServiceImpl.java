@@ -38,7 +38,7 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * 登录
-     * @param loginParams 登录参数（账号 & 密码）
+     * @param loginParams 登录参数:账号,密码
      * @return 登录成功返回 Token，失败返回错误信息
      */
     @Override
@@ -55,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
         String encryptedPassword = DigestUtils.md5DigestAsHex((password + salt).getBytes());
 
         // 3. 根据用户名和密码查询用户是否存在
-        SysUser sysUser = sysUserService.findUser(account, encryptedPassword);
+        SysUser sysUser = sysUserService.findUserByAccount(account, encryptedPassword);
         if (sysUser == null) {
             return Result.fail(ErrorCode.ACCOUNT_PWD_NOT_EXIST.getCode(), ErrorCode.ACCOUNT_PWD_NOT_EXIST.getMsg());
         }
@@ -114,8 +114,8 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * 退出登录
-     * @param token 用户的 Token
-     * @return 退出结果
+     * @param token jwt生成的用户Token
+     * @return
      */
     @Override
     public Result logout(String token) {

@@ -29,14 +29,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 
     /**
-     * 根据账号名和密码进行登录校验
+     * 根据账号名和密码进行登录
      *
-     * @param account
-     * @param password
-     * @return
+     * @param account 账号名
+     * @param password 密码
+     * @return  登录返回一个SysUser对象
      */
     @Override
-    public SysUser findUser(String account, String password) {
+    public SysUser findUserByAccount(String account, String password) {
         LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysUserLambdaQueryWrapper.eq(SysUser::getAccount, account).eq(SysUser::getPassword, password);
         sysUserLambdaQueryWrapper.select(SysUser::getId, SysUser::getAccount, SysUser::getAvatar, SysUser::getNickname);
@@ -48,8 +48,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 根据token查找用户信息
-     *
-     * @param token
+     * @param token jwt生成的token
      * @return
      */
     @Override
@@ -69,7 +68,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 根据id查找作者(用户)信息,不存在则返回一个默认用户
-     * @param id
+     * @param id 作者(用户)id
      * @return
      */
     @Override
@@ -81,7 +80,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 根据评论人id获取对应的vo对象
      *
-     * @param id
+     * @param id 评论人id
      * @return
      */
     @Override

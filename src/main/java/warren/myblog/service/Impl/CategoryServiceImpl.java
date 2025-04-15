@@ -24,7 +24,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     private CategoryMapper categoryMapper;
     /**
      * 根据分类id查找分类
-     * @param categoryId
+     * @param categoryId 分类id
      * @return
      */
     @Override
@@ -39,7 +39,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     /**
-     * 获取文章分类
+     * 获取所有分类
      * @return
      */
     @Override
@@ -58,15 +58,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public Result findAllCategoryDetails() {
         LambdaQueryWrapper<Category> lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(Category::getId,Category::getCategoryName);
         List<Category> categories = categoryMapper.selectList(lambdaQueryWrapper);
-
         return Result.success(copyList(categories));
     }
 
     /**
-     * 实现点进文章分类后, 在文章列表上面显示当前分类的信息
-     * @param id
+     * 实点击导航栏后显示文章分类和该分类下文章(这里直接调用了首页文章列表功能)
+     * @param id 分类id
      * @return
      */
     @Override
@@ -76,8 +74,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     /**
-     * 拷贝属性
-     * @param category
+     * 拷贝属性 将category转换为categoryVo
+     * @param category 分类
      * @return
      */
     public CategoryVo copy(Category category){
@@ -87,8 +85,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     /**
-     * 拷贝属性
-     * @param categoryList
+     * 拷贝属性 将categoryList转为categoryVoList
+     * @param categoryList 分类集合
      * @return
      */
     public List<CategoryVo> copyList(List<Category> categoryList){

@@ -38,11 +38,22 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Autowired
     private ArticleMapper articleMapper;
 
+    /**
+     * 拷贝属性
+     * @param tag 标签
+     * @return
+     */
     public TagVo copy(Tag tag){
         TagVo tagVo = new TagVo();
         BeanUtils.copyProperties(tag,tagVo);
         return tagVo;
     }
+
+    /**
+     * 拷贝属性
+     * @param tagList 标签集合
+     * @return
+     */
     public List<TagVo> copyList(List<Tag> tagList){
         List<TagVo> tagVoList = new ArrayList<>();
         for (Tag tag : tagList) {
@@ -53,7 +64,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     /**
      * 根据文章 id查询标签列表
-     * @param articleId
+     * @param articleId 文章id
      * @return
      */
     @Override
@@ -71,9 +82,9 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      */
     @Override
     public Result getHotTags(int tagNumber) {
-        //根据需要显示的前tagNumber条数据 查询对应的所有id
+        //返回前六条标签的id集合
         List<Long>tagIds=tagMapper.getHotTags(tagNumber);
-        //如果为空直接返回一个空集合
+
         if(CollectionUtils.isEmpty(tagIds)){
             return Result.success(Collections.emptyList());
         }
@@ -83,15 +94,6 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         return Result.success(tagList);
     }
 
-    /**
-     * 根据标签id查找标签名
-     * @param id
-     * @return
-     */
-    @Override
-    public String findTagNameById(Long id) {
-        return tagMapper.selectById(id).getTagName();
-    }
 
     /**
      * 查询所有标签
@@ -110,7 +112,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return
      */
     @Override
-    public Result findAllDetails() {
+    public Result findAllTagsDetails() {
         LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
         List<Tag> tags = this.tagMapper.selectList(queryWrapper);
         return Result.success(copyList(tags));
@@ -118,12 +120,12 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     }
 
     /**
-     * 实现点击标签可以查询到所有的文章
-     * @param id
+     * 实现点击标签可以查询到所有的文章(这里也调用了首页文章列表功能)
+     * @param id 标签id
      * @return
      */
     @Override
-    public Result findAllDetailsById(Long id) {
+    public Result findAllDetailsByTagId(Long id) {
         Tag tag = tagMapper.selectById(id);
         return Result.success(copy(tag));
     }
@@ -133,7 +135,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      * @return
      */
     @Override
-    public Result addtag(TagDTO tagDto) {
+    public Result addTag(TagDTO tagDto) {
         SysUser sysUser = UserThreadLocal.get();
         Long sysUserId = sysUser.getId();
         Tag tag=new Tag();
@@ -146,7 +148,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     /**
      * 删除标签
-     * @param id
+     * @param id 标签id
      * @return
      */
     @Transactional  // 保证所有操作在同一事务内，要么全部成功，要么全部回滚

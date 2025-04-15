@@ -37,14 +37,13 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
 
     /**
      * 根据文章id查询评论列表
-     *
-     * @param id
+     * @param articleId 文章id
      * @return
      */
     @Override
-    public Result CommentsByArticlId(Long id) {
+    public Result findCommentsByArticleId(Long articleId) {
         LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        commentLambdaQueryWrapper.eq(Comment::getArticleId, id);
+        commentLambdaQueryWrapper.eq(Comment::getArticleId, articleId);
         commentLambdaQueryWrapper.orderByDesc(Comment::getCreateDate);
         List<Comment> comments = commentsMapper.selectList(commentLambdaQueryWrapper);
         return Result.success(copyList(comments));
@@ -52,12 +51,11 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
 
     /**
      * 评论
-     * @param commentParam
+     * @param commentParam 评论参数
      * @return
      */
     @Override
     public Result comment(CommentParam commentParam) {
-        System.out.println("==== 文章ID = " + commentParam.getArticleId());
 
         SysUser sysUser = UserThreadLocal.get();
         Comment comment = new Comment();
@@ -98,9 +96,8 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
 
 
     /**
-     * 拷贝属性
-     *
-     * @param comments
+     * 拷贝属性,将commentList转化为commentVoList
+     * @param comments 评论集合
      * @return
      */
     private List<CommentVo> copyList(List<Comment> comments) {
@@ -109,12 +106,11 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
             commentVos.add(copy(comment));
         }
         return commentVos;
-
     }
 
     /**
-     * 拷贝属性等
-     * @param comment
+     * 拷贝属性,将comment转化为commentVo
+     * @param comment 评论
      * @return
      */
     private CommentVo copy(Comment comment) {
@@ -145,10 +141,10 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
         return commentVo;
     }
 
+
     /**
      * 根据父评论的id获取子评论
-     *
-     * @param id
+     * @param id 父评论id
      * @return
      */
     private List<CommentVo> findCommentsByParentId(Long id) {
@@ -163,8 +159,8 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
 
     /**
      * 删除评论
-     * @param commentId
-     * @param currentUser
+     * @param commentId 评论的id
+     * @param currentUser 当前登录用户
      * @return
      */
     @Override
@@ -173,18 +169,18 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
         // 1. 查找评论
         Comment comment = commentsMapper.selectById(commentId);
         if (comment == null) {
-            return Result.fail(404, "要删除的评论不存在");
+            return Result.fail(404, "要删除的评论不存在哦~");
         }
         // 2. 查找评论对应的文章
         Article article = articleMapper.selectById(comment.getArticleId());
         if (article == null) {
-            return Result.fail(404, "文章不存在");
+            return Result.fail(404, "文章不存在哦~");
         }
         // 3. 判断是否有权限删除
         boolean isCommentAuthor = comment.getCommentatorId().equals(currentUser.getId());
         boolean isArticleAuthor = article.getAuthorId().equals(currentUser.getId());
         if (!isCommentAuthor && !isArticleAuthor) {
-            return Result.fail(403, "您无权删除该评论");
+            return Result.fail(403, "您无权删除该评论哦~");
         }
         // 4. 执行删除
         int rows = commentsMapper.deleteById(commentId);

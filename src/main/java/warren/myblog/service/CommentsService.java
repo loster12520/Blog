@@ -11,18 +11,24 @@ import warren.myblog.vo.Params.CommentParam;
  */
 public interface CommentsService extends IService<Comment> {
     /**
-     * 根据文章id查询评论列表
-     * @param id
+     * 根据文章id查询评论
+     * @param articleId 文章id
      * @return
      */
-    Result CommentsByArticlId(Long id);
+    Result findCommentsByArticleId(Long articleId);
 
     /**
      * 评论
-     * @param commentParam
+     * @param commentParam 评论参数
      * @return
      */
     Result comment(CommentParam commentParam);
 
+    /**
+     * 删除评论
+     * @param commentId  评论的id
+     * @param currentUser 当前登录用户
+     * @return
+     */
     Result deleteComment(Long commentId, SysUser currentUser);
 }

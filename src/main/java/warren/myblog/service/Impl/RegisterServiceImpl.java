@@ -31,7 +31,7 @@ public class RegisterServiceImpl implements RegisterService {
     private RedisTemplate<String, String> redisTemplate;
     /**
      * 注册
-     * @param sysUser
+     * @param sysUser 用户对象
      * @return
      */
     @Override
@@ -43,12 +43,13 @@ public class RegisterServiceImpl implements RegisterService {
         }
         LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper=new LambdaQueryWrapper<>();
         sysUserLambdaQueryWrapper.eq(SysUser::getAccount,sysUser.getAccount());
-        Long l = sysUserMapper.selectCount(sysUserLambdaQueryWrapper);
+        Long count = sysUserMapper.selectCount(sysUserLambdaQueryWrapper);
 
-        if (l>0){
+        if (count>0){
             //用户名重复
         return Result.fail(ErrorCode.ACCOUNT_EXIST.getCode(),ErrorCode.ACCOUNT_EXIST.getMsg());
         }
+        //设置默认头像
         sysUser.setAvatar("/img_1.png");
 
         //加盐并进行md5加密

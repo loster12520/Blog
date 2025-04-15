@@ -53,7 +53,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .addPathPatterns(
                         "/test",
                         "/comments/create/change",
-                        "/articles/publish",
+                        "/articles/publishArticle",
                         "/comments/delete",
                         "/articles/deleteBatch",
                         "/tags/*" // 拦截所有 /tags/ 下的单级请求
