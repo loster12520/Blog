@@ -1,123 +1,117 @@
 package warren.myblog.controller;
 
+
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import warren.myblog.aop.Cache;
 import warren.myblog.aop.LogAnnotation;
 import warren.myblog.common.Result;
-import warren.myblog.common.UserThreadLocal;
-import warren.myblog.mapper.ArticleMapper;
-import warren.myblog.pojo.Article;
-import warren.myblog.pojo.SysUser;
 import warren.myblog.service.ArticleService;
 import warren.myblog.vo.Params.ArticleParam;
 import warren.myblog.vo.Params.PageParams;
-
 import java.util.List;
-
-import static warren.myblog.vo.Params.ErrorCode.DELETE_ERROR;
-import static warren.myblog.vo.Params.ErrorCode.PARAMS_ERROR;
 
 /**
  * author: Warren
  */
 @RestController
-@RequestMapping("/articles")
+@RequestMapping
 public class ArticleController {
+
     private static final int limit = 3;
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private ArticleMapper articleMapper;
 
     /**
-     * 查询文章信息
-     *
-     * @param pageParams
+     * 首页-文章列表功能,归档功能也一并完成了
+     * @param pageParams 分页参数,包含page,pageSize,categoryId等
      * @return
      */
-    @PostMapping
-    public Result ListArticle(@RequestBody PageParams pageParams) {
-        return articleService.ListArticle(pageParams);
+    @Operation(tags = "首页文章列表")
+    @PostMapping("/article/list")
+    public Result listArticle(@RequestBody PageParams pageParams) {
+        return articleService.listArticle(pageParams);
     }
+
 
     /**
      * 最热文章
-     *
      * @return
      */
-    @PostMapping("hot")
+    @Operation(tags = "最热文章")
+    @GetMapping("/article/hot")
     @Cache(expire = 5 * 60 * 1000, name = "hot_article")
     public Result hotArticle() {
         int limit = 5;
-        return articleService.hotArticles(limit);
+        return articleService.hotArticle(limit);
     }
 
     /**
      * 最新文章
-     *
      * @return
      */
-    @PostMapping("/new")
+    @Operation(tags = "最新文章")
+    @GetMapping("/article/new")
     @Cache(expire = 5 * 60 * 1000, name = "new_article")
     public Result newArticle() {
-        return articleService.newArticles(limit);
+        return articleService.newArticle(limit);
     }
 
     /**
      * 文章归档
-     *
      * @return
      */
+    @Operation(tags = "文章归档")
     @LogAnnotation(module = "文章", operation = "获取文章列表")
-    @PostMapping("/listArchives")
-    public Result listArchives() {
-        return articleService.listArchives();
+    @GetMapping("/article/archive")
+    public Result listArchive() {
+        return articleService.listArchive();
     }
+
 
     /**
      * 获取文章详情
-     *
      * @return
      */
-    @PostMapping("/view/{id}")
-    public Result viewArticle(@PathVariable Long id) {
-        return articleService.viewArticleById(id);
+    @Operation(tags = "获取文章详情")
+    @GetMapping("/article/view/{articleId}")
+    public Result viewArticle(@PathVariable("articleId") Long id) {
+        return articleService.viewArticle(id);
     }
 
     /**
      * 发布文章
-     *
-     * @param articleParam
+     * @param articleParam 发布文章有关的参数
      * @return
      */
-    @PostMapping("/publish")
+    @Operation(tags ="发布文章" )
+    @PostMapping("/user/publish")
     public Result publish(@RequestBody ArticleParam articleParam) {
-        return articleService.publish(articleParam);
+        return articleService.publishArticle(articleParam);
     }
 
     /**
      * 删除文章
-     *
-     * @param ids
+     * @param ids 文章id集合
      * @return
      */
-    @PostMapping("/deleteBatch")
-    public Result deleteArticles(@RequestBody List<Long> ids) {
-        return articleService.deleteArticles(ids);
+    @Operation(tags="删除文章")
+    @PostMapping("/user/deleteArticle")
+    public Result deleteArticle(@RequestBody List<Long> ids) {
+        return articleService.deleteArticle(ids);
     }
 
     /**
      * 搜索文章
-     *
-     * @param articleParam
+     * @param articleParam 和文章有关的参数
      * @return
      */
-    @PostMapping("search")
+    @Operation(tags = "搜索文章")
+    @PostMapping("/article/search")
     public Result search(@RequestBody ArticleParam articleParam) {
-        //写一个搜索接口
-        String search = articleParam.getSearch();
-        return articleService.searchArticle(search);
+        String searchKeyword = articleParam.getSearchKeyword();
+        return articleService.searchArticle(searchKeyword);
     }
 }

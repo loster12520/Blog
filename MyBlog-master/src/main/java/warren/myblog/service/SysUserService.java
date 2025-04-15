@@ -2,7 +2,6 @@ package warren.myblog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import warren.myblog.common.Result;
-import warren.myblog.pojo.Article;
 import warren.myblog.pojo.SysUser;
 import warren.myblog.vo.UserVo;
 
@@ -11,37 +10,30 @@ import warren.myblog.vo.UserVo;
  */
 public interface SysUserService extends IService<SysUser> {
     /**
-     * 根据id查询作者
-     * @param authorId
-     * @return
+     * 根据账号名和密码进行登录
+     * @param account 账号名
+     * @param password 密码
+     * @return 登录返回一个SysUser对象
      */
-    SysUser findAuthorById(Long authorId);
-
-    /**
-     * 根据账号名和密码进行登录校验
-     * @param account
-     * @param password
-     * @return
-     */
-    SysUser findUser(String account, String password);
+    SysUser findUserByAccount(String account, String password);
 
     /**
      * 根据token查找用户信息
-     * @param token
+     * @param token jwt生成的用户token
      * @return
      */
     Result findUserByToken(String token);
 
     /**
-     * 根据id查找用户
-     * @param l
+     * 根据id查找作者(用户)信息
+     * @param id 作者(用户)信息
      * @return
      */
-    SysUser findUserById(long l);
+    SysUser findUserById(long id);
 
     /**
      * 根据评论人id获取对应的vo对象
-     * @param id
+     * @param id 评论人id
      * @return
      */
     UserVo findUserVoById(Long id);

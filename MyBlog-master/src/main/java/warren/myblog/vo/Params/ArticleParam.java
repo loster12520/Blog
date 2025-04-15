@@ -20,6 +20,6 @@ public class ArticleParam {
 
     private String title;
 
-    private String search;
+    private String searchKeyword;
 
 }

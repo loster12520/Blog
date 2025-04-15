@@ -13,59 +13,59 @@ import java.util.List;
  */
 public interface ArticleService extends IService<Article> {
     /**
-     * 文章列表,归档功能也一并完成了
-     * @param pageParams
+     * 首页-文章列表功能,归档功能也一并完成了
+     * @param pageParams 分页参数
      * @return
      */
-    Result ListArticle(PageParams pageParams);
+    Result listArticle(PageParams pageParams);
 
     /**
      * 最热文章
-     * @param limit
+     * @param limit 需要显示的最热文章数
      * @return
      */
-    Result hotArticles(int limit);
+    Result hotArticle(int limit);
 
     /**
      * 最新文章
-     * @param limit
+     * @param limit 需要显示的最新文章数
      * @return
      */
-    Result newArticles(int limit);
+    Result newArticle(int limit);
 
     /**
      * 文章归档
      * @return
      */
-    Result listArchives();
+    Result listArchive();
 
     /**
      * 获取文章详情
-     * @param id
+     * @param id 文章id
      * @return
      */
-    Result viewArticleById(Long id);
+    Result viewArticle(Long id);
 
     /**
      * 发布文章
-     * @param articleParam
+     * @param articleParam 和文章有关的参数
      * @return
      */
-    Result publish(ArticleParam articleParam);
+    Result publishArticle(ArticleParam articleParam);
 
 
     /**
      * 删除文章
-     * @param ids
+     * @param ids 需要删除的文章的id集合
      * @return
      */
-    Result deleteArticles(List<Long> ids);
+    Result deleteArticle(List<Long> ids);
 
 
     /**
      * 搜索文章
-     * @param search
+     * @param searchKeyword 和文章标题有关的关键词
      * @return
      */
-    Result searchArticle(String search);
+    Result searchArticle(String searchKeyword);
 }

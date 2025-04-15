@@ -27,32 +27,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     private LoginService loginService;
 
-    /**
-     * 根据id查找作者
-     *
-     * @param authorId
-     * @return
-     */
-    @Override
-    public SysUser findAuthorById(Long authorId) {
-        SysUser author = sysUserMapper.selectById(authorId);
-        //如果为空设置默认昵称
-        if (author == null) {
-            author = new SysUser();
-            author.setNickname("Warren");
-        }
-        return author;
-    }
 
     /**
-     * 根据账号名和密码进行登录校验
+     * 根据账号名和密码进行登录
      *
-     * @param account
-     * @param password
-     * @return
+     * @param account 账号名
+     * @param password 密码
+     * @return  登录返回一个SysUser对象
      */
     @Override
-    public SysUser findUser(String account, String password) {
+    public SysUser findUserByAccount(String account, String password) {
         LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
         sysUserLambdaQueryWrapper.eq(SysUser::getAccount, account).eq(SysUser::getPassword, password);
         sysUserLambdaQueryWrapper.select(SysUser::getId, SysUser::getAccount, SysUser::getAvatar, SysUser::getNickname);
@@ -64,8 +48,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 根据token查找用户信息
-     *
-     * @param token
+     * @param token jwt生成的token
      * @return
      */
     @Override
@@ -83,15 +66,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.success(loginUserVo);
     }
 
+    /**
+     * 根据id查找作者(用户)信息,不存在则返回一个默认用户
+     * @param id 作者(用户)id
+     * @return
+     */
     @Override
-    public SysUser findUserById(long l) {
-        return this.getById(l); // MyBatis-Plus 提供的 `getById` 方法
+    public SysUser findUserById(long id) {
+        SysUser sysUser = sysUserMapper.selectById(id);
+        return sysUser==null?new SysUser("warren"):sysUser;
     }
 
     /**
      * 根据评论人id获取对应的vo对象
      *
-     * @param id
+     * @param id 评论人id
      * @return
      */
     @Override

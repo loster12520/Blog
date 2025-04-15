@@ -49,30 +49,82 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ArticleBodyMapper articleBodyMapper;
     @Autowired
     private CategoryService categoryService;
-    @Autowired
-    private CommentsService commentsService;
 
     /**
-     * 文章列表,归档功能也一并完成了
+     * 拷贝属性(将article集合转为articleVo)
      *
-     * @param pageParams
+     * @param articleRecords 文章
+     * @param isTag 是否需要返回标签
+     * @param isAuthor 是否需要返回作者信息
+     * @return
+     */
+    private List<ArticleVo> copyList(List<Article> articleRecords, Boolean isTag, Boolean isAuthor) {
+        List<ArticleVo> articleVoList = new ArrayList<>();
+        for (Article articleRecord : articleRecords) {
+            articleVoList.add(copy(articleRecord, isTag, isAuthor, false, false));
+        }
+        return articleVoList;
+    }
+
+    /**
+     * 拷贝属性(将article转为articleVo)
+     *
+     * @param article 文章
+     * @param isTag      是否需要标签
+     * @param isAuthor   是否需要作者
+     * @param isBody     是否需要文章内容
+     * @param isCategory 是否需要文章分类
+     * @return
+     */
+    private ArticleVo copy(Article article, Boolean isTag, Boolean isAuthor, Boolean isBody, Boolean isCategory) {
+        ArticleVo articleVo = new ArticleVo();
+        BeanUtils.copyProperties(article, articleVo);
+
+        if (isTag) {
+            Long articleId = article.getId();
+            articleVo.setTags(tagService.findTagsByArticleId(articleId));
+        }
+        if (isAuthor) {
+            Long authorId = article.getAuthorId();
+            SysUser sysUser = sysUserService.findUserById(authorId);
+            UserVo userVo = new UserVo();
+            userVo.setAvatar(sysUser.getAvatar());
+            userVo.setId(sysUser.getId());
+            userVo.setNickname(sysUser.getNickname());
+            articleVo.setAuthor(userVo);
+        }
+        if (isBody) {
+            Long bodyId = article.getBodyId();
+            articleVo.setBody(findArticleBodyById(bodyId));
+        }
+        if (isCategory) {
+            Long categoryId = article.getCategoryId();
+            articleVo.setCategory(categoryService.findCategotyById(categoryId));
+        }
+        return articleVo;
+    }
+
+
+
+    /**
+     * 首页-文章列表功能,归档功能也一并完成了
+     * @param pageParams 分页参数,包含page,pageSize,categoryId等
      * @return
      */
     @Override
-    public Result ListArticle(PageParams pageParams) {
+    public Result listArticle(PageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPagesize());
         IPage<Article> articleIPage = this.articleMapper.listArticle(page, pageParams.getCategoryId(), pageParams.getTagId(), pageParams.getYear(), pageParams.getMonth());
         return Result.success(copyList(articleIPage.getRecords(), true, true));
     }
 
     /**
-     * 显示最热文章
-     *
-     * @param limit
+     * 最热文章
+     * @param limit 需要显示的最热文章数
      * @return
      */
     @Override
-    public Result hotArticles(int limit) {
+    public Result hotArticle(int limit) {
         LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<>();
         articleLambdaQueryWrapper.orderByDesc(Article::getViewCounts);
         articleLambdaQueryWrapper.select(Article::getId, Article::getTitle);
@@ -85,13 +137,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     /**
-     * 查询最新文章
+     * 最新文章
      *
-     * @param limit
+     * @param limit 需要显示的最新文章数
      * @return
      */
     @Override
-    public Result newArticles(int limit) {
+    public Result newArticle(int limit) {
         LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<>();
         articleLambdaQueryWrapper.orderByDesc(Article::getCreateDate);
         articleLambdaQueryWrapper.select(Article::getId, Article::getTitle);
@@ -104,22 +156,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 文章归档
-     *
      * @return
      */
     @Override
-    public Result listArchives() {
-        return Result.success(articleMapper.listArchives());
+    public Result listArchive() {
+        return Result.success(articleMapper.listArchive());
     }
+
 
     /**
      * 获取文章详情
-     *
-     * @param id
+     * @param id 文章id
      * @return
      */
     @Override
-    public Result viewArticleById(Long id) {
+    public Result viewArticle(Long id) {
         //1.根据id查询文章信息
         //2.根据bodyId和categoryId查询文章详情
         Article article = this.articleMapper.selectById(id);
@@ -133,16 +184,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 发布文章
-     * <li>发布文章就是构建 article对象</li>
-     * <li>authorId 就是当前登录用户的id</li>
-     * <li>拿到标签 发布文章后会生成一个文章id 这时需要将标签和文章关联起来</li>
-     * <li>存储文章内容body</li>
-     *
-     * @param articleParam
+     * 发布文章就是构建 article对象
+     * authorId 就是当前登录用户的id
+     * 拿到标签 发布文章后会生成一个文章id 这时需要将标签和文章关联起来
+     * 存储文章内容body
+     * @param articleParam 和文章有关的参数
      * @return
      */
     @Override
-    public Result publish(ArticleParam articleParam) {
+    public Result publishArticle(ArticleParam articleParam) {
         //获取当前登录的用户,即发布文章的作者
         SysUser sysUser = UserThreadLocal.get();
 
@@ -199,13 +249,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     /**
-     * 删除
-     *
-     * @param ids
+     * 删除文章
+     * @param ids 需要删除的文章的id集合
      * @return
      */
     @Override
-    public Result deleteArticles(List<Long> ids) {
+    public Result deleteArticle(List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return Result.fail(PARAMS_ERROR.getCode(), "没有需要删除的文章");
         }
@@ -224,95 +273,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
     }
 
-    /**
-     *  编辑文章
-     * @param id
-     * @return
-     */
-
-
-    /**
-     * 拷贝属性
-     *
-     * @param articleRecords
-     * @param isTag
-     * @param isAuthor
-     * @return
-     */
-    private List<ArticleVo> copyList(List<Article> articleRecords, Boolean isTag, Boolean isAuthor) {
-        List<ArticleVo> articleVoList = new ArrayList<>();
-        for (Article articleRecord : articleRecords) {
-            articleVoList.add(copy(articleRecord, isTag, isAuthor, false, false));
-        }
-        return articleVoList;
-    }
-
-    /**
-     * 重载方法
-     *
-     * @param articleRecords
-     * @param isTag
-     * @param isAuthor
-     * @param isBody
-     * @param isCategory
-     * @return
-     */
-    private List<ArticleVo> copyList(List<Article> articleRecords, Boolean isTag, Boolean isAuthor, Boolean isBody, Boolean isCategory) {
-        List<ArticleVo> articleVoList = new ArrayList<>();
-        for (Article articleRecord : articleRecords) {
-            articleVoList.add(copy(articleRecord, isTag, isAuthor, isBody, isCategory));
-        }
-        return articleVoList;
-    }
-
-    /**
-     * 拷贝属性
-     *
-     * @param article
-     * @param isTag      是否需要标签
-     * @param isAuthor   是否需要作者
-     * @param isBody     是否需要文章内容
-     * @param isCategory 是否需要文章分类
-     * @return
-     */
-    private ArticleVo copy(Article article, Boolean isTag, Boolean isAuthor, Boolean isBody, Boolean isCategory) {
-        ArticleVo articleVo = new ArticleVo();
-        BeanUtils.copyProperties(article, articleVo);
-
-        if (isTag) {
-            Long articleId = article.getId();
-            articleVo.setTags(tagService.findTagsByArticleId(articleId));
-        }
-        if (isAuthor) {
-            Long authorId = article.getAuthorId();
-            SysUser sysUser = sysUserService.findUserById(authorId);
-            UserVo userVo = new UserVo();
-            userVo.setAvatar(sysUser.getAvatar());
-            userVo.setId(sysUser.getId());
-            userVo.setNickname(sysUser.getNickname());
-            articleVo.setAuthor(userVo);
-        }
-        if (isBody) {
-            Long bodyId = article.getBodyId();
-            articleVo.setBody(findArticleBodyById(bodyId));
-        }
-        if (isCategory) {
-            Long categoryId = article.getCategoryId();
-            articleVo.setCategory(categoryService.findCategotyById(categoryId));
-        }
-        return articleVo;
-    }
-
 
     /**
      * 根据文章内容id获取内容
      *
-     * @param bodyId
+     * @param bodyId 文章详情id
      * @return
      */
     private ArticleBodyVo findArticleBodyById(Long bodyId) {
         ArticleBody articleBody = articleBodyMapper.selectById(bodyId);
-        //前端视图
+
         ArticleBodyVo articleBodyVo = new ArticleBodyVo();
 
         articleBodyVo.setContent(articleBody.getContent());
@@ -321,17 +291,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     /**
-     * 搜索文章
-     *
-     * @param search
+     * 文章搜索
+     * @param searchKeyword 和文章标题有关的关键词
      * @return
      */
     @Override
-    public Result searchArticle(String search) {
+    public Result searchArticle(String searchKeyword) {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByDesc(Article::getViewCounts);
         queryWrapper.select(Article::getId, Article::getTitle);
-        queryWrapper.like(Article::getTitle, search);
+        queryWrapper.like(Article::getTitle, searchKeyword);
         //select id,title from article order by view_counts desc limit 5
         List<Article> articles = articleMapper.selectList(queryWrapper);
 

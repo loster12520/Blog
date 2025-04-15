@@ -1,5 +1,6 @@
 package warren.myblog.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import warren.myblog.common.Result;
@@ -18,20 +19,20 @@ public class LoginAndLogoutController {
 
     /**
      * 登录
-     *
-     * @return
+     * @return  登录成功返回 Token，失败返回错误信息
      */
-    @PostMapping("/login")
+    @Operation(tags = "登录")
+    @PostMapping("/public/login")
     public Result login(@RequestBody LoginParams loginParams) {
         return loginService.login(loginParams);
     }
 
     /**
      * 退出登录
-     *
-     * @return
+     * @return 登录成功返回 Token，失败返回错误信息
      */
-    @GetMapping("/logout")
+    @Operation(tags = "退出登录")
+    @GetMapping("/user/logout")
     public Result logout(@RequestHeader("Authorization") String token) {
         return loginService.logout(token);
     }

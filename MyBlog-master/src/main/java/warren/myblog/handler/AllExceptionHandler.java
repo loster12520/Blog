@@ -8,15 +8,16 @@ import warren.myblog.common.Result;
 /**
  * 处理全局异常
  */
-//对加了@Controller注解的方法进行拦截处理 AOP的实现
+//对加了@Controller注解的方法进行拦截处理(通过AOP实现)
 @ControllerAdvice
 public class AllExceptionHandler {
-    //进行异常处理，处理Exception.class的异常
+
+    //处理Exception.class的异常
     @ExceptionHandler(Exception.class)
     @ResponseBody //返回json数据
     public Result doException(Exception ex){
         ex.printStackTrace();
-        return Result.fail(-999,"系统异常");
+        return Result.fail(-999,"系统异常,请联系管理员哦~");
     }
 
 }

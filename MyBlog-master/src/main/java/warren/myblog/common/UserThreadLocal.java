@@ -2,6 +2,9 @@ package warren.myblog.common;
 
 import warren.myblog.pojo.SysUser;
 
+/**
+ * 使用线程池获取登录用户信息.
+ */
 public class UserThreadLocal {
 
     private UserThreadLocal(){}

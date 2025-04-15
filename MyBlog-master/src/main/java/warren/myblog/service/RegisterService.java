@@ -9,7 +9,7 @@ import warren.myblog.pojo.SysUser;
 public interface RegisterService {
     /**
      * 注册
-     * @param sysUser
+     * @param sysUser 用户对象
      * @return
      */
     Result register(SysUser sysUser);

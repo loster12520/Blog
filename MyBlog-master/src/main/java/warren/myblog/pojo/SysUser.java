@@ -2,11 +2,14 @@ package warren.myblog.pojo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class SysUser {
 
     private Long id;
@@ -37,4 +40,8 @@ public class SysUser {
 
     private String status;
 
+
+    public SysUser( String nickname) {
+        this.nickname = nickname;
+    }
 }

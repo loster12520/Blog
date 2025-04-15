@@ -3,6 +3,7 @@ package warren.myblog.common;
 import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -12,14 +13,14 @@ import warren.myblog.service.LoginService;
 import warren.myblog.vo.Params.ErrorCode;
 
 /**
- * 登录拦截器（LoginInterceptor）
- * 该拦截器用于拦截所有请求，检查请求头中是否包含合法的 Token，
- * 以此判断用户是否已登录，并决定是否放行请求。
+ * 登录拦截器
+ * 用于拦截所有请求，检查请求头中是否包含合法的 Token，
+ * 然后判断用户是否已登录，并决定是否放行请求。
  */
+@Slf4j
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 
-    // 自动注入 LoginService，用于 Token 验证
     @Autowired
     private LoginService loginService;
 
@@ -41,14 +42,14 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // 获取请求头中的 Authorization 令牌（Token）
         String token = request.getHeader("Authorization");
-
-        // 打印请求信息，方便调试
-        System.out.println("=================request start===========================");
         String requestURI = request.getRequestURI();
-        System.out.println("request uri:" + requestURI);
-        System.out.println("request method:" + request.getMethod());
-        System.out.println("token:" + token);
-        System.out.println("=================request end===========================");
+        String method = request.getMethod();
+
+        log.info("=================request start===========================");
+        log.info("request uri: {}", requestURI);
+        log.info("request method: {}", method);
+        log.info("token: {}", token);
+        log.info("=================request end===========================");
 
         // 如果 Token 为空，则返回未登录的错误信息
         if (token == null) {
@@ -70,12 +71,14 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         // 用户已登录，放行请求
-        //我希望在controller中 直接获取用户的信息 怎么获取?
+        //使用线程池储存当前登录的用户信息
         UserThreadLocal.put(sysUser);
         return true;
     }
+
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        //防止内存泄漏
         UserThreadLocal.remove();
     }
 }
