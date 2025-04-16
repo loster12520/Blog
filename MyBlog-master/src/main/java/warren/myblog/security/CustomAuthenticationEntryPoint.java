@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * 未认证（401） 自定义认证点
  */
-@Component
+
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override

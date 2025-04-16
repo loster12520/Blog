@@ -23,16 +23,17 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
-    /**根据用户名获取sysuser对象
+    /**根据用户名获取 sysuser对象
      *
-     * @param username the username identifying the user whose data is required.
+     * @param username 登录用户名
      * @return
      * @throws UsernameNotFoundException 用户名不存在异常
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         LambdaQueryWrapper<SysUser>lambdaQueryWrapper=new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(SysUser::getNickname,username);
+        lambdaQueryWrapper.eq(SysUser::getAccount,username);
         SysUser user = sysUserMapper.selectOne(lambdaQueryWrapper);
 
         if (Objects.isNull(user)){

@@ -13,9 +13,6 @@ import java.util.List;
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
-    @Select("select *from ms_sys_user where nickname=#{username}")
-    SysUser findUserByUsername(String username);
-
 
 
 }

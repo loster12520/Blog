@@ -14,7 +14,7 @@ public enum  ErrorCode {
     ARTICLE_NOT_EXIST(10005,"文章不存在"),
     DELETE_ERROR(10006,"删除失败"),
     NOT_FOUND(10007,"不存在"),
-    ACCOUNT_PWD_INCORRECT(10008,"用户名或密码错误"),
+    ACCOUNT_PWD_INCORRECT(10008,"用户名或密码错误!~~~"),
     LOGIN_ERROR(10009,"登录过程中发生错误"),
     NO_PERMISSION(70001,"无访问权限"),
     SESSION_TIME_OUT(90001,"会话超时"),

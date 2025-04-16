@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import warren.myblog.common.Result;
-import warren.myblog.service.LoginService;
+import warren.myblog.security.SecurityLoginService;
 import warren.myblog.Params.LoginParams;
 
 /*
@@ -12,14 +12,15 @@ import warren.myblog.Params.LoginParams;
  */
 @RestController
 @RequestMapping
-public class LoginAndLogoutController {
+public class LoginController {
 
     @Autowired
-    private LoginService loginService;
+    private SecurityLoginService loginService;
 
     /**
-     * 登录
-     * @return  登录成功返回 Token，失败返回错误信息
+     * security自定义登录
+     * @param loginParams 用户对象,包含账户名和密码
+     * @return
      */
     @Operation(tags = "登录")
     @PostMapping("/public/login")
@@ -27,13 +28,4 @@ public class LoginAndLogoutController {
         return loginService.login(loginParams);
     }
 
-    /**
-     * 退出登录
-     * @return 登录成功返回 Token，失败返回错误信息
-     */
-    @Operation(tags = "退出登录")
-    @GetMapping("/user/logout")
-    public Result logout(@RequestHeader("Authorization") String token) {
-        return loginService.logout(token);
-    }
 }

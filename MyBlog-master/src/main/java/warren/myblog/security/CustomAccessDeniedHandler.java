@@ -12,7 +12,6 @@ import java.io.IOException;
 /**
  * 权限不足（403） 自定义访问拒绝处理器
  */
-@Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
