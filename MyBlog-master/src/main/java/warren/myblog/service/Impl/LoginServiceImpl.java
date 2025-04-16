@@ -13,8 +13,8 @@ import warren.myblog.common.Result;
 import warren.myblog.pojo.SysUser;
 import warren.myblog.service.LoginService;
 import warren.myblog.service.SysUserService;
-import warren.myblog.vo.Params.ErrorCode;
-import warren.myblog.vo.Params.LoginParams;
+import warren.myblog.Params.ErrorCode;
+import warren.myblog.Params.LoginParams;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class LoginServiceImpl implements LoginService {
         sysUserService.updateById(sysUser); // 触发 updateFill 逻辑
 
         // 5. 生成 Token
-        String token = JWTUtils.createToken(sysUser.getId());
+        String token = JWTUtils.createToken(String.valueOf(sysUser.getId()));
 
         // 6. 存入 Redis，设置 24 小时有效期
         redisTemplate.opsForValue().set("TOKEN_" + token, JSON.toJSONString(sysUser), 1, TimeUnit.DAYS);
@@ -102,7 +102,7 @@ public class LoginServiceImpl implements LoginService {
 
             if (sysUser != null) {
                 // 重新生成 Token
-                String newToken = JWTUtils.createToken(sysUser.getId());
+                String newToken = JWTUtils.createToken(String.valueOf(sysUser.getId()));
                 redisTemplate.opsForValue().set("TOKEN_" + newToken, JSON.toJSONString(sysUser), 1, TimeUnit.DAYS);
                 return sysUser;
             }

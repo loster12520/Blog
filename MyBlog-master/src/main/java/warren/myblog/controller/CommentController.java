@@ -7,7 +7,7 @@ import warren.myblog.common.Result;
 import warren.myblog.common.UserThreadLocal;
 import warren.myblog.pojo.SysUser;
 import warren.myblog.service.CommentsService;
-import warren.myblog.vo.Params.CommentParam;
+import warren.myblog.Params.CommentParam;
 
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class CommentController {
      * @return
      */
     @Operation(tags = "查询文章下的所有评论")
-    @GetMapping("/comment/listComments/{articleId}")
+    @GetMapping("/public/comment/listComments/{articleId}")
     public Result comments(@PathVariable Long articleId) {
         return commentsService.findCommentsByArticleId(articleId);
     }

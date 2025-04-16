@@ -13,7 +13,7 @@ import warren.myblog.common.Result;
 import warren.myblog.mapper.SysUserMapper;
 import warren.myblog.pojo.SysUser;
 import warren.myblog.service.RegisterService;
-import warren.myblog.vo.Params.ErrorCode;
+import warren.myblog.Params.ErrorCode;
 
 import java.util.concurrent.TimeUnit;
 
@@ -58,7 +58,7 @@ public class RegisterServiceImpl implements RegisterService {
         sysUser.setPassword(password);
         sysUserMapper.insert(sysUser);
 
-        String token = JWTUtils.createToken(sysUser.getId());
+        String token = JWTUtils.createToken(String.valueOf(sysUser.getId()));
         redisTemplate.opsForValue().set("TOKEN_"+token, JSON.toJSONString(sysUser),1, TimeUnit.DAYS);
         System.out.println("生成的 Token：" + token);
         return Result.success(token);

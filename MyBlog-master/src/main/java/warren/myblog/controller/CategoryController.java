@@ -13,7 +13,7 @@ import warren.myblog.service.CategoryService;
  * author: Warren
  */
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/public/category")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;

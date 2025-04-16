@@ -8,8 +8,8 @@ import warren.myblog.aop.Cache;
 import warren.myblog.aop.LogAnnotation;
 import warren.myblog.common.Result;
 import warren.myblog.service.ArticleService;
-import warren.myblog.vo.Params.ArticleParam;
-import warren.myblog.vo.Params.PageParams;
+import warren.myblog.Params.ArticleParam;
+import warren.myblog.Params.PageParams;
 import java.util.List;
 
 /**
@@ -30,7 +30,7 @@ public class ArticleController {
      * @return
      */
     @Operation(tags = "首页文章列表")
-    @PostMapping("/article/list")
+    @PostMapping("/public/article/list")
     public Result listArticle(@RequestBody PageParams pageParams) {
         return articleService.listArticle(pageParams);
     }
@@ -42,7 +42,7 @@ public class ArticleController {
      * @return
      */
     @Operation(tags = "最热文章")
-    @GetMapping("/article/hot")
+    @GetMapping("/public/article/hot")
     @Cache(expire = 5 * 60 * 1000, name = "hot_article")
     public Result hotArticle() {
         int limit = 5;
@@ -54,7 +54,7 @@ public class ArticleController {
      * @return
      */
     @Operation(tags = "最新文章")
-    @GetMapping("/article/new")
+    @GetMapping("/public/article/new")
     @Cache(expire = 5 * 60 * 1000, name = "new_article")
     public Result newArticle() {
         return articleService.newArticle(limit);
@@ -66,7 +66,7 @@ public class ArticleController {
      */
     @Operation(tags = "文章归档")
     @LogAnnotation(module = "文章", operation = "获取文章列表")
-    @GetMapping("/article/archive")
+    @GetMapping("/public/article/archive")
     public Result listArchive() {
         return articleService.listArchive();
     }
@@ -77,7 +77,7 @@ public class ArticleController {
      * @return
      */
     @Operation(tags = "获取文章详情")
-    @GetMapping("/article/view/{articleId}")
+    @GetMapping("/public/article/view/{articleId}")
     public Result viewArticle(@PathVariable("articleId") Long id) {
         return articleService.viewArticle(id);
     }
@@ -110,7 +110,7 @@ public class ArticleController {
      * @return
      */
     @Operation(tags = "搜索文章")
-    @PostMapping("/article/search")
+    @PostMapping("/public/article/search")
     public Result search(@RequestBody ArticleParam articleParam) {
         String searchKeyword = articleParam.getSearchKeyword();
         return articleService.searchArticle(searchKeyword);

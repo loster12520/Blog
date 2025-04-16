@@ -17,7 +17,7 @@
         <result column="category_id" property="categoryId"/>
     </resultMap>
 
-    <select id="listArchives" resultType="warren.myblog.vo.Dto.ArchiveDTO">
+    <select id="listArchives" resultType="warren.myblog.Dto.ArchiveDTO">
         SELECT
         YEAR(STR_TO_DATE(create_date, '%Y-%m-%d %H:%i:%s')) AS year,  <!-- 修正格式 -->
         MONTH(STR_TO_DATE(create_date, '%Y-%m-%d %H:%i:%s')) AS month, <!-- 修正格式 -->

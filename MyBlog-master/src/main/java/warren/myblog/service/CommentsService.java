@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import warren.myblog.common.Result;
 import warren.myblog.pojo.Comment;
 import warren.myblog.pojo.SysUser;
-import warren.myblog.vo.Params.CommentParam;
+import warren.myblog.Params.CommentParam;
 
 /*
  * author: Warren

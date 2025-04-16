@@ -16,8 +16,8 @@ import warren.myblog.pojo.*;
 import warren.myblog.service.*;
 import warren.myblog.vo.ArticleBodyVo;
 import warren.myblog.vo.ArticleVo;
-import warren.myblog.vo.Params.ArticleParam;
-import warren.myblog.vo.Params.PageParams;
+import warren.myblog.Params.ArticleParam;
+import warren.myblog.Params.PageParams;
 import warren.myblog.vo.TagVo;
 import warren.myblog.vo.UserVo;
 
@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static warren.myblog.vo.Params.ErrorCode.DELETE_ERROR;
-import static warren.myblog.vo.Params.ErrorCode.PARAMS_ERROR;
+import static warren.myblog.Params.ErrorCode.DELETE_ERROR;
+import static warren.myblog.Params.ErrorCode.PARAMS_ERROR;
 
 /*
  * author: Warren

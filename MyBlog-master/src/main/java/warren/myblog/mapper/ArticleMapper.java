@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 
 import warren.myblog.pojo.Article;
-import warren.myblog.vo.Dto.ArchiveDTO;
+import warren.myblog.Dto.ArchiveDTO;
 
 import java.util.List;
 
