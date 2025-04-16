@@ -15,7 +15,7 @@ import warren.myblog.pojo.SysUser;
 import warren.myblog.service.CommentsService;
 import warren.myblog.service.SysUserService;
 import warren.myblog.vo.CommentVo;
-import warren.myblog.vo.Params.CommentParam;
+import warren.myblog.Params.CommentParam;
 import warren.myblog.vo.UserVo;
 
 import java.util.ArrayList;

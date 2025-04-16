@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import warren.myblog.common.Result;
 import warren.myblog.service.LoginService;
-import warren.myblog.vo.Params.LoginParams;
+import warren.myblog.Params.LoginParams;
 
 /*
  * author: Warren

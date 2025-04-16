@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import warren.myblog.common.Result;
 import warren.myblog.service.TagService;
-import warren.myblog.vo.Dto.TagDTO;
+import warren.myblog.Dto.TagDTO;
 
 /*
  * author: Warren
@@ -35,8 +35,7 @@ public class TagController {
     @Operation(tags = "删除标签")
     @DeleteMapping("/user/{id}")
     public Result removeTagById(@PathVariable("id") Long id){
-
-        System.out.println("进入该方法!");return tagService.removeTagById(id);
+      return tagService.removeTagById(id);
     }
 
     /**
@@ -44,7 +43,7 @@ public class TagController {
      * @return
      */
     @Operation(tags = "最热标签(前六条)")
-    @GetMapping("/tags/hot")
+    @GetMapping("/public/tags/hot")
     public Result getHots() {
         int tagNumber = 6;
         return tagService.getHotTags(tagNumber);
@@ -56,7 +55,7 @@ public class TagController {
      * @return
      */
     @Operation(tags = "查询所有标签")
-    @GetMapping("/tags/list")
+    @GetMapping("/public/tags/list")
     public Result getAllTag() {
         return tagService.findAll();
     }
@@ -66,7 +65,7 @@ public class TagController {
      * @return
      */
     @Operation(tags = "导航-查询所有标签的详细信息")
-    @GetMapping("/tags/detail")
+    @GetMapping("/public/tags/detail")
     public Result getAllTagDetails() {
         return tagService.findAllTagsDetails();
     }
@@ -77,7 +76,7 @@ public class TagController {
      * @return
      */
     @Operation(tags = "实现点击标签可以查询到所有的文章")
-    @GetMapping("/tags/detail/{id}")
+    @GetMapping("/public/tags/detail/{id}")
     public Result findAllDetailsById(@PathVariable("id")Long id) {
         return tagService.findAllDetailsByTagId(id);
     }

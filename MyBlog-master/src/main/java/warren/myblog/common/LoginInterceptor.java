@@ -10,7 +10,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import warren.myblog.pojo.SysUser;
 import warren.myblog.service.LoginService;
-import warren.myblog.vo.Params.ErrorCode;
+import warren.myblog.Params.ErrorCode;
 
 /**
  * 登录拦截器

@@ -1,4 +1,4 @@
-package warren.myblog.vo.Dto;
+package warren.myblog.Dto;
 
 import lombok.Data;
 

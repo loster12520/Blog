@@ -1,4 +1,4 @@
-package warren.myblog.vo.Params;
+package warren.myblog.Params;
 
 import lombok.Data;
 

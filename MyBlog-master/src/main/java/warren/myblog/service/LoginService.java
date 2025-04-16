@@ -2,7 +2,7 @@ package warren.myblog.service;
 
 import warren.myblog.common.Result;
 import warren.myblog.pojo.SysUser;
-import warren.myblog.vo.Params.LoginParams;
+import warren.myblog.Params.LoginParams;
 
 /*
  * author: Warren
