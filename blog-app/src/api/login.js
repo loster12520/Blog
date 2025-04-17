@@ -11,7 +11,6 @@ export function login(account, password) {
     method: 'post',
     data
   }).then(result => {
-      console.log(result.data)
       setToken(result.data)
     }
   )

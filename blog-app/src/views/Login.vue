@@ -24,6 +24,7 @@
 
 <script>
 import {login} from "@/api/login"
+import {getToken} from '@/request/token'
 
 export default {
   name: 'Login',
