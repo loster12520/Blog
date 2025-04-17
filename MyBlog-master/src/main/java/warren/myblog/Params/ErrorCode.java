@@ -5,7 +5,7 @@ import warren.myblog.pojo.Article;
 /**
  * 统一错误码
  */
-public enum  ErrorCode {
+public enum ErrorCode {
 
     PARAMS_ERROR(10001,"参数有误"),
     ACCOUNT_PWD_NOT_EXIST(10002,"用户名或密码不存在"),
@@ -16,9 +16,11 @@ public enum  ErrorCode {
     NOT_FOUND(10007,"不存在"),
     ACCOUNT_PWD_INCORRECT(10008,"用户名或密码错误!~~~"),
     LOGIN_ERROR(10009,"登录过程中发生错误"),
-    NO_PERMISSION(70001,"无访问权限"),
-    SESSION_TIME_OUT(90001,"会话超时"),
-    NO_LOGIN(90002,"未登录");
+    USERINFO_GET_ERROR(10010,"无法获取用户信息"),
+    ALERADAY_LIKES(10011,"您已点赞过该文章"),
+    NO_PERMISSION(10012,"无访问权限"),
+    NO_LOGIN(10013,"未登录");
+
     private int code;
     private String msg;
 

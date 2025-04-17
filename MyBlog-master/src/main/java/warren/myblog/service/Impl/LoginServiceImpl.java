@@ -117,9 +117,9 @@ public class LoginServiceImpl implements LoginService {
      * @param token jwt生成的用户Token
      * @return
      */
-    @Override
-    public Result logout(String token) {
-        redisTemplate.delete("TOKEN_" + token);
-        return Result.success(null);
-    }
+//    @Override
+//    public Result logout(String token) {
+//        redisTemplate.delete("TOKEN_" + token);
+//        return Result.success(null);
+//    }
 }

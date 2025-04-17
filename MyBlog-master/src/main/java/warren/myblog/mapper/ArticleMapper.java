@@ -33,4 +33,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
      */
     IPage<Article> listArticle(Page<Article> page, Long categoryId, Long tagId, String year, String month);
 
+    /**
+     * 点赞后根据文章id 将文章点赞数加一
+     * @param articleId 文章id
+     */
+    void increseLikes(Long articleId);
 }

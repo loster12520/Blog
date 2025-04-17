@@ -47,4 +47,9 @@ public class Article {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createDate;
 
+    /**
+     * 点赞数
+     */
+    private Long likes;
+
 }
