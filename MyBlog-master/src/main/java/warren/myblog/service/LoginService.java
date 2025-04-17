@@ -22,10 +22,10 @@ public interface LoginService {
      */
     SysUser checkToken(String token);
 
-    /**
-     * 退出登录
-     * @param token jwt生成的token
-     * @return
-     */
-    Result logout(String token);
+//    /**
+//     * 退出登录
+//     * @param token jwt生成的token
+//     * @return
+//     */
+//    Result logout(String token);
 }

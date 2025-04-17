@@ -25,11 +25,11 @@ public interface SysUserService extends IService<SysUser> {
     Result findUserByToken(String token);
 
     /**
-     * 根据id查找作者(用户)信息
-     * @param id 作者(用户)信息
+     * 根据用户名查找作者(用户)信息
+     * @param username 作者(用户)信息
      * @return
      */
-    SysUser findUserById(long id);
+    SysUser findUserByUserName(String username);
 
     /**
      * 根据评论人id获取对应的vo对象
@@ -37,4 +37,13 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     UserVo findUserVoById(Long id);
+
+    /**
+     * 点赞文章
+     * @param articleId 文章id
+     * @return
+     */
+    Result likes(Long articleId);
+
+    SysUser findUserById(Long authorId);
 }

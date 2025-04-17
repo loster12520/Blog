@@ -36,7 +36,6 @@ public class ArticleController {
     }
 
 
-
     /**
      * 最热文章
      * @return
@@ -115,4 +114,6 @@ public class ArticleController {
         String searchKeyword = articleParam.getSearchKeyword();
         return articleService.searchArticle(searchKeyword);
     }
+
+
 }

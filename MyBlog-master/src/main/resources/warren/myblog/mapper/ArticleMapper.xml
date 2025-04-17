@@ -16,6 +16,9 @@
         <result column="body_id" property="bodyId"/>
         <result column="category_id" property="categoryId"/>
     </resultMap>
+    <update id="increseLikes">
+        update ms_article set likes=likes+1 where id=#{articleId};
+    </update>
 
     <select id="listArchives" resultType="warren.myblog.Dto.ArchiveDTO">
         SELECT
@@ -48,7 +51,6 @@
         </where>
         ORDER BY weight DESC, view_counts DESC, create_date DESC
     </select>
-
 
 
 
