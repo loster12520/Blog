@@ -11,9 +11,12 @@ const service = axios.create({
 //request拦截器
 service.interceptors.request.use(config => {
 
-  if (store.state.token) {
-    config.headers['token'] = getToken()
+  const token = getToken()
+  console.log(token)
+  if (token) {
+    config.headers.token = token
   }
+  console.log('Request headers:', config.headers); // 添加日志
   return config
 }, error => {
 

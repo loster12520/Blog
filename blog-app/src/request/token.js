@@ -1,11 +1,14 @@
-export function getToken() {
-  return localStorage.token
-}
-
+// 设置 token
 export function setToken(token) {
-  return localStorage.token = token
+  sessionStorage.setItem('token', token);
 }
 
+// 获取 token
+export function getToken() {
+  return sessionStorage.getItem('token');
+}
+
+// 移除 token
 export function removeToken() {
-  return localStorage.removeItem('token')
+  sessionStorage.removeItem('token');
 }

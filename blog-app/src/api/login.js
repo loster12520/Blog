@@ -1,16 +1,21 @@
 import request from '@/request'
-import {removeToken} from '@/request/token'
+import {setToken, removeToken} from '@/request/token'
 
 export function login(account, password) {
   const data = {
     account,
     password
   }
-  return request({
+  const result = request({
     url: '/public/login',
     method: 'post',
     data
-  })
+  }).then(result => {
+      console.log(result.data)
+      setToken(result.data)
+    }
+  )
+  return result
 }
 
 export function logout(token) {
@@ -19,7 +24,6 @@ export function logout(token) {
 
 export function getUserInfo(token) {
   return request({
-    headers: {'Authorization': token},
     url: '/users/currentUser',
     method: 'get'
   })
@@ -32,7 +36,7 @@ export function register(account, nickname, password) {
     password
   }
   return request({
-    url: '/register',
+    url: '/public/register',
     method: 'post',
     data
   })
