@@ -1,4 +1,5 @@
 import request from '@/request'
+import {removeToken} from '@/request/token'
 
 export function login(account, password) {
   const data = {
@@ -6,18 +7,14 @@ export function login(account, password) {
     password
   }
   return request({
-    url: '/login',
+    url: '/public/login',
     method: 'post',
     data
   })
 }
 
 export function logout(token) {
-  return request({
-    headers: {'Authorization': token},
-    url: '/logout',
-    method: 'get'
-  })
+  return removeToken()
 }
 
 export function getUserInfo(token) {

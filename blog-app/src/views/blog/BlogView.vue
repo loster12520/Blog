@@ -150,7 +150,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import MarkdownEditor from '@/components/markdown/MarkdownEditor'
 import CommmentItem from '@/components/comment/CommentItem'
 import { viewArticle, removeArticlesBatch } from '@/api/article'

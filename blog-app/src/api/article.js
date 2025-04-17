@@ -3,13 +3,11 @@ import request from '@/request'
 
 export function getArticles(query, page) {
   return request({
-    url: '/articles',
+    url: '/public/article/list',
     method: 'post',
     data: {
       page: page.pageNumber,
       pageSize: page.pageSize,
-      name: page.name,
-      sort: page.sort,
       year: query.year,
       month: query.month,
       tagId: query.tagId,
@@ -20,44 +18,43 @@ export function getArticles(query, page) {
 
 export function getHotArtices() {
   return request({
-    url: '/articles/hot',
-    method: 'post'
+    url: '/public/article/hot',
+    method: 'get'
   })
 }
 
 export function getNewArtices() {
   return request({
-    url: '/articles/new',
-    method: 'post'
+    url: '/public/articles/new',
+    method: 'get'
   })
 }
 
 export function viewArticle(id) {
   return request({
-    url: `/articles/view/${id}`,
-    method: 'post'
+    url: `/public/articles/view/${id}`,
+    method: 'get'
   })
 }
 
-export function getArticlesByCategory(id) {
-  return request({
-    url: `/articles/category/${id}`,
-    method: 'post'
-  })
-}
+// export function getArticlesByCategory(id) {
+//   return request({
+//     url: `/articles/category/${id}`,
+//     method: 'post'
+//   })
+// }
 
-export function getArticlesByTag(id) {
-  return request({
-    url: `/articles/tag/${id}`,
-    method: 'post'
-  })
-}
+// export function getArticlesByTag(id) {
+//   return request({
+//     url: `/articles/tag/${id}`,
+//     method: 'post'
+//   })
+// }
 
 
 export function publishArticle(article,token) {
   return request({
-    headers: {'Authorization': token},
-    url: '/articles/publish',
+    url: '/user/publish',
     method: 'post',
     data: article
   })
@@ -65,41 +62,32 @@ export function publishArticle(article,token) {
 
 export function listArchives() {
   return request({
-    url: '/articles/listArchives',
-    method: 'post'
+    url: '/public/article/archive',
+    method: 'get'
   })
 }
 
 export function getArticleById(id) {
   return request({
-    url: `/articles/view/${id}`,
-    method: 'post'
+    url: `/public/articles/view/${id}`,
+    method: 'get'
   })
 }
 
 // 批量删除文章
 export function removeArticlesBatch(ids, token) {
   return request({
-    url: '/articles/deleteBatch',
+    url: '/user/deleteArticle',
     method: 'post',
-    data: ids,
-    headers: { 'Authorization': token }
+    data: ids
   });
 }
 
-
+// 这个传入可能有问题！！！！
 export function searchArticle(search) {
   return request({
-    url: '/articles/search',
+    url: '/public/articles/search',
     method: 'post',
     data: {"search":search}
   })
 }
-// // 批量删除文章
-// export function removeArticlesBatch(ids) {
-//   return request({
-//     url: '/articles/deleteBatch',
-//     method: 'post',
-//     data: ids
-//   });
-// }

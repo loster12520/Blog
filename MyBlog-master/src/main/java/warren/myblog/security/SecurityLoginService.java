@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import warren.myblog.Params.ErrorCode;
 import warren.myblog.Params.LoginParams;
 import warren.myblog.common.Result;
+import warren.myblog.mapper.SysUserMapper;
 import warren.myblog.pojo.SysUser;
 import warren.myblog.service.SysUserService;
 import warren.myblog.utils.JWTUtils;
@@ -23,11 +24,12 @@ public class SecurityLoginService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private SysUserService sysUserService;
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
 
     public Result login(LoginParams loginParams) {
