@@ -26,7 +26,7 @@ public class RegisterController {
      * @return
      */
     @Operation(tags = "注册")
-    @PostMapping("/pulic/register")
+    @PostMapping("/public/register")
     public Result register(@RequestBody SysUser sysUser){
         return registerService.register(sysUser);
     }

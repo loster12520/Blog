@@ -9,7 +9,8 @@
           </el-form-item>
 
           <el-form-item prop="password">
-            <el-input placeholder="密码" type="password" v-model="userForm.password" prefix-icon="el-icon-lock"></el-input>
+            <el-input placeholder="密码" type="password" v-model="userForm.password"
+                      prefix-icon="el-icon-lock"></el-input>
           </el-form-item>
 
           <el-form-item class="me-login-button">
@@ -22,6 +23,8 @@
 </template>
 
 <script>
+import {login} from "@/api/login"
+
 export default {
   name: 'Login',
   data() {
@@ -32,12 +35,12 @@ export default {
       },
       rules: {
         account: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { max: 10, message: '不能大于10个字符', trigger: 'blur' }
+          {required: true, message: '请输入用户名', trigger: 'blur'},
+          {max: 10, message: '不能大于10个字符', trigger: 'blur'}
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { max: 10, message: '不能大于10个字符', trigger: 'blur' }
+          {required: true, message: '请输入密码', trigger: 'blur'},
+          {max: 10, message: '不能大于10个字符', trigger: 'blur'}
         ]
       }
     }
@@ -46,11 +49,11 @@ export default {
     login(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$store.dispatch('login', this.userForm).then(() => {
+          login(this.userForm.account, this.userForm.password).then(() => {
             this.$router.go(-1)
           }).catch(error => {
             if (error !== 'error') {
-              this.$message({ message: error, type: 'error', showClose: true });
+              this.$message({message: error, type: 'error', showClose: true});
             }
           })
         }

@@ -34,6 +34,7 @@ public class SecurityLoginService {
 
     public Result login(LoginParams loginParams) {
         try {
+            System.out.println("!!!" + loginParams);
             // 创建认证令牌
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginParams.getAccount(), loginParams.getPassword());

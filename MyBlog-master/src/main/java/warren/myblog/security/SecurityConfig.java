@@ -53,6 +53,7 @@ public class SecurityConfig {
 
     /**
      * 未认证（401）时调用自定义认证入口点
+     *
      * @return
      */
     @Bean
@@ -62,12 +63,14 @@ public class SecurityConfig {
 
     /**
      * 权限不足（403）时调用自定义访问拒绝处理器
+     *
      * @return
      */
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
+
     /**
      * 安全过滤链配置：禁用 CSRF，配置 CORS，指定公共接口放行，
      * 其余接口要求认证，设置 Session 为无状态，并添加 JWT 自定义过滤器。
@@ -95,11 +98,10 @@ public class SecurityConfig {
                 // 定义请求授权规则
                 .authorizeHttpRequests(auth -> auth
                         // 允许 /public 接口无需认证（登录接口公开）
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/doc.html","/swagger-ui/**","/v3/api-docs/**","/webjars/**").permitAll()
+                        .requestMatchers("/public/**", "/doc.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
                         // 其他所有请求均要求认证
                         .anyRequest().authenticated()
-                )  .exceptionHandling(exceptionHandling -> exceptionHandling
+                ).exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler(accessDeniedHandler())
                 )

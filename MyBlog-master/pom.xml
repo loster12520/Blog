@@ -63,7 +63,7 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
             <version>2.3.3</version>
         </dependency>
-<!--        七牛云-->
+        <!--        七牛云-->
         <dependency>
             <groupId>com.qiniu</groupId>
             <artifactId>qiniu-java-sdk</artifactId>
@@ -78,32 +78,32 @@
         </dependency>
 
         <!-- Spring AOP 依赖 -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>5.3.30</version> <!-- 版本与 Spring 保持一致 -->
-            </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>5.3.30</version> <!-- 版本与 Spring 保持一致 -->
+        </dependency>
 
-            <!-- AspectJ 运行时 -->
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>1.9.19</version> <!-- 版本可以根据需要调整 -->
-            </dependency>
+        <!-- AspectJ 运行时 -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.19</version> <!-- 版本可以根据需要调整 -->
+        </dependency>
 
-            <!-- AspectJ 语言扩展 -->
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>1.9.19</version>
-            </dependency>
+        <!-- AspectJ 语言扩展 -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.19</version>
+        </dependency>
 
-            <!-- Spring Boot 项目需要 AOP 依赖 -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-aop</artifactId>
-                <version>2.7.10</version> <!-- 版本与 Spring Boot 保持一致 -->
-            </dependency>
+        <!-- Spring Boot 项目需要 AOP 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>2.7.10</version> <!-- 版本与 Spring Boot 保持一致 -->
+        </dependency>
 
 
         <dependency>
@@ -208,18 +208,18 @@
         </dependency>
 
 
-<!--        &lt;!&ndash; 阿里通义大模型 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud.ai</groupId>-->
-<!--            <artifactId>spring-ai-alibaba-starter</artifactId>-->
-<!--            <version>1.0.0-M3.3</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; 阿里通义大模型 &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.alibaba.cloud.ai</groupId>-->
+        <!--            <artifactId>spring-ai-alibaba-starter</artifactId>-->
+        <!--            <version>1.0.0-M3.3</version>-->
+        <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.ai</groupId>-->
-<!--            <artifactId>spring-ai-core</artifactId>-->
-<!--            <version>1.0.0-M6</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.ai</groupId>-->
+        <!--            <artifactId>spring-ai-core</artifactId>-->
+        <!--            <version>1.0.0-M6</version>-->
+        <!--        </dependency>-->
 
     </dependencies>
 
@@ -245,6 +245,8 @@
 <!--            </snapshots>-->
 <!--        </repository>-->
 <!--    </repositories>-->
+
+
     <build>
         <plugins>
             <plugin>
