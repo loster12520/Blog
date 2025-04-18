@@ -91,6 +91,7 @@ public class LoginServiceImpl implements LoginService {
 
         MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
 
+<<<<<<< HEAD
         return myUserDetails.getSysUser();
 
 //        // 1. 判断 Token 是否为空
@@ -121,16 +122,25 @@ public class LoginServiceImpl implements LoginService {
 //        }
 //
 //        return JSON.parseObject(userJson, SysUser.class);
+=======
+        // 3. 检查 Redis 是否存在 Token
+        String token_ = redisTemplate.opsForValue().get("SYSUSER_TOKEN_");
+        if (StringUtils.isBlank(token_)) {
+            // Redis 里没有 Token，可能是过期了，尝试重新生成
+            String userId = claims.get("userId").toString();
+            SysUser sysUser = sysUserService.findUserById(Long.parseLong(userId));
+
+            if (sysUser != null) {
+                // 重新生成 Token
+                String newToken = JWTUtils.createToken(String.valueOf(sysUser.getId()));
+                redisTemplate.opsForValue().set("TOKEN_" + newToken, JSON.toJSONString(sysUser), 1, TimeUnit.DAYS);
+                return sysUser;
+            }
+            return null;
+        }
+
+        return JSON.parseObject(token_, SysUser.class);
+>>>>>>> 129a09a9d62a77f0914d885c1cb589e7b50629cf
     }
 
-    /**
-     * 退出登录
-     * @param token jwt生成的用户Token
-     * @return
-     */
-//    @Override
-//    public Result logout(String token) {
-//        redisTemplate.delete("TOKEN_" + token);
-//        return Result.success(null);
-//    }
 }

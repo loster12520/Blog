@@ -47,4 +47,6 @@ public class ArticleVo {
 
     private List<CategoryVo> categorys;
 
+    private List<ArticleVo>relatedArticles;
+
 }

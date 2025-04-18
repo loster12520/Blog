@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ import warren.myblog.security.MyUserDetails;
 
 import warren.myblog.service.LoginService;
 import warren.myblog.service.SysUserService;
-import warren.myblog.vo.LoginUserVo;
 import warren.myblog.Params.ErrorCode;
+import warren.myblog.vo.SysUserVo;
 import warren.myblog.vo.UserVo;
 
 import java.time.LocalDateTime;
@@ -64,23 +65,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 根据token查找用户信息
-     * @param token jwt生成的token
+     * @param
      * @return
      */
     @Override
-    public Result findUserByToken(String token) {
-        //校验token
-        SysUser sysUser = loginService.checkToken(token);
-        if (sysUser == null) {
-            return Result.fail(ErrorCode.TOKEN_ILLEGAL.getCode(), ErrorCode.TOKEN_ILLEGAL.getMsg());
+    public Result getUserInfo() {
+        // 1. 从 SecurityContext 中获取 Authentication 并判断登录状态
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
+            return Result.fail(ErrorCode.NO_LOGIN.getCode(), ErrorCode.NO_LOGIN.getMsg());
         }
-        LoginUserVo loginUserVo = new LoginUserVo();
-        loginUserVo.setAccount(sysUser.getAccount());
-        loginUserVo.setAvatar(sysUser.getAvatar());
-        loginUserVo.setId(sysUser.getId());
-        loginUserVo.setNickname(sysUser.getNickname());
-        return Result.success(loginUserVo);
+
+        // 2. 从 principal 获取自定义的 MyUserDetails
+        Object principal = auth.getPrincipal();
+        if (!(principal instanceof MyUserDetails)) {
+            return Result.fail(ErrorCode.USERINFO_GET_ERROR.getCode(), ErrorCode.USERINFO_GET_ERROR.getMsg());
+        }
+        MyUserDetails userDetails = (MyUserDetails) principal;
+
+        // 3. 构造返回的 VO 对象
+        SysUser user = userDetails.getSysUser();
+        SysUserVo vo = new SysUserVo();
+        BeanUtils.copyProperties(user, vo);
+        return Result.success(vo);
     }
+
 
     /**
      * 根据评论人id获取对应的vo对象
@@ -150,5 +159,30 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return sysUserMapper.selectById(authorId);
 
     }
+
+//    /**
+//     * 点击用户头像获取用户详情
+//     * @return
+//     */
+//    @Override
+//    public Result getUserDetails() {
+//        // 1. 获取当前用户的 ID
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication == null || !authentication.isAuthenticated()) {
+//            return Result.fail(NO_LOGIN.getCode(),NO_LOGIN.getMsg());
+//        }
+//
+//        Object principal = authentication.getPrincipal();
+//        Long userId;
+//        if (principal instanceof MyUserDetails) {
+//            userId = ((MyUserDetails) principal).getSysUser().getId();
+//        } else {
+//            return Result.fail(USERINFO_GET_ERROR.getCode(), USERINFO_GET_ERROR.getMsg());
+//        }
+//        SysUserVo sysUserVo=new SysUserVo();
+//        SysUser sysUser = sysUserMapper.selectById(userId);
+//        BeanUtils.copyProperties(sysUser,sysUserVo);
+//        return Result.success(sysUserVo);
+//    }
 
 }

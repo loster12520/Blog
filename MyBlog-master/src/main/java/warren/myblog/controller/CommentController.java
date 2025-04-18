@@ -4,12 +4,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import warren.myblog.common.Result;
-import warren.myblog.common.UserThreadLocal;
+
 import warren.myblog.pojo.SysUser;
+import warren.myblog.security.MyUserDetails;
 import warren.myblog.service.CommentsService;
 import warren.myblog.Params.CommentParam;
+import warren.myblog.utils.SecurityUtils;
 
 import java.util.Map;
+
 
 /*
  * author: Warren
@@ -56,8 +59,8 @@ public class CommentController {
         if (commentId == null) {
             return Result.fail(400, "缺少评论ID");
         }
-        // 获取当前登录用户
-        SysUser currentUser = UserThreadLocal.get();
+
+        SysUser currentUser = SecurityUtils.getCurrentUser();
         if (currentUser == null) {
             return Result.fail(401, "请先登录");
         }

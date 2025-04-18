@@ -2,15 +2,23 @@ package warren.myblog.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import warren.myblog.aop.Cache;
 import warren.myblog.aop.LogAnnotation;
 import warren.myblog.common.Result;
 import warren.myblog.service.ArticleService;
 import warren.myblog.Params.ArticleParam;
 import warren.myblog.Params.PageParams;
+import warren.myblog.utils.QiniuUtils;
+
 import java.util.List;
+import java.util.UUID;
+
+import static warren.myblog.Params.ErrorCode.FILE_UPLOAD_ERROR;
 
 /**
  * author: Warren
@@ -22,6 +30,8 @@ public class ArticleController {
     private static final int limit = 3;
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private QiniuUtils qiniuUtils;
 
 
     /**
@@ -87,8 +97,20 @@ public class ArticleController {
      * @return
      */
     @Operation(tags ="发布文章" )
-    @PostMapping("/user/publish")
-    public Result publish(@RequestBody ArticleParam articleParam) {
+    @PostMapping(value = "/user/publish", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result publish(
+            @RequestPart("article") ArticleParam articleParam,
+            @RequestPart("coverImage") MultipartFile coverImage
+    ) {
+        // 1. 上传封面
+        String fileName = UUID.randomUUID() + "." +
+                StringUtils.substringAfterLast(coverImage.getOriginalFilename(), ".");
+        if (!qiniuUtils.upload(coverImage, fileName)) {
+            return Result.fail(FILE_UPLOAD_ERROR.getCode(),FILE_UPLOAD_ERROR.getMsg());
+        }
+        articleParam.setPictureUrl(QiniuUtils.url + fileName);
+
+        // 2. 调用 Service 完成文章发布
         return articleService.publishArticle(articleParam);
     }
 

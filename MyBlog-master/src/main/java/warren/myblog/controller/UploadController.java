@@ -13,6 +13,8 @@ import warren.myblog.utils.QiniuUtils;
 
 import java.util.UUID;
 
+import static warren.myblog.Params.ErrorCode.FILE_UPLOAD_ERROR;
+
 /*
  * author: Warren
  */
@@ -31,7 +33,7 @@ public class UploadController {
         if (upload) {
             return Result.success(QiniuUtils.url + fileName);
         }
-        return Result.fail(20001, "上传失败");
+        return Result.fail(FILE_UPLOAD_ERROR.getCode(), FILE_UPLOAD_ERROR.getMsg());
     }
 
 }
