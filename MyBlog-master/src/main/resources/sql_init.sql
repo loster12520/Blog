@@ -11,7 +11,7 @@
  Target Server Version : 80034 (8.0.34)
  File Encoding         : 65001
 
- Date: 18/04/2025 08:29:36
+ Date: 18/04/2025 13:39:40
 */
 
 SET NAMES utf8mb4;
@@ -56,6 +56,7 @@ CREATE TABLE `ms_article`  (
                                `category_id` int NULL DEFAULT NULL COMMENT '类别id',
                                `likes` int NULL DEFAULT NULL COMMENT '点赞数',
                                `collect` int NULL DEFAULT NULL COMMENT '收藏数',
+                               `picture-url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '封面',
                                PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1903332362394615810 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
@@ -86,7 +87,7 @@ CREATE TABLE `ms_article_collect`  (
                                        INDEX `user_id`(`user_id` ASC) USING BTREE,
                                        CONSTRAINT `ms_article_collect_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `ms_article` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
                                        CONSTRAINT `ms_article_collect_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ms_sys_user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '文章收藏表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '文章收藏表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for ms_article_like
