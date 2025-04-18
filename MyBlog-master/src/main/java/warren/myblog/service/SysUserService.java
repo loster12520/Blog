@@ -19,10 +19,10 @@ public interface SysUserService extends IService<SysUser> {
 
     /**
      * 根据token查找用户信息
-     * @param token jwt生成的用户token
+     * @param
      * @return
      */
-    Result findUserByToken(String token);
+    Result getUserInfo();
 
 
     /**
@@ -45,4 +45,10 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     SysUser findUserById(Long authorId);
+
+//    /**
+//     * 点击用户头像获取用户详情
+//     * @return
+//     */
+//    Result getUserDetails();
 }

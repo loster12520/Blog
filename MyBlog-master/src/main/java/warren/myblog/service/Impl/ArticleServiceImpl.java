@@ -4,16 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import warren.myblog.common.Result;
-import warren.myblog.common.UserThreadLocal;
+
 import warren.myblog.mapper.ArticleBodyMapper;
 import warren.myblog.mapper.ArticleMapper;
 import warren.myblog.mapper.ArticleTagMapper;
 import warren.myblog.pojo.*;
 import warren.myblog.service.*;
+import warren.myblog.utils.SecurityUtils;
 import warren.myblog.vo.ArticleBodyVo;
 import warren.myblog.vo.ArticleVo;
 import warren.myblog.Params.ArticleParam;
@@ -171,16 +173,43 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      */
     @Override
     public Result viewArticle(Long id) {
-        //1.根据id查询文章信息
-        //2.根据bodyId和categoryId查询文章详情
-        Article article = this.articleMapper.selectById(id);
-
+        // 1. 查询并更新阅读数
+        Article article = articleMapper.selectById(id);
         threadService.updateViewCount(articleMapper, article);
 
+        // 2. 转为 VO，获取正文与分类等
         ArticleVo articleVo = copy(article, true, true, true, true);
+
+        // 3. 查询相关文章并设置到 VO
+        List<ArticleVo> related = findRelatedArticles(article.getCategoryId(), id, 5);
+        articleVo.setRelatedArticles(related);
+
         return Result.success(articleVo);
     }
 
+
+    /**
+     * 查询同一分类下的相关文章，排除当前文章，并按发布时间倒序返回最多 limit 篇
+     * @param categoryId 分类id
+     * @param currentArticleId 当前阅读的文章id
+     * @param limit 限制返回的相关文章数
+     * @return
+     */
+    public List<ArticleVo> findRelatedArticles(Long categoryId, Long currentArticleId, int limit) {
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        // 只查询相同分类的文章
+        wrapper.eq(Article::getCategoryId, categoryId)
+                // 排除当前文章
+                .ne(Article::getId, currentArticleId)
+                // 按创建时间倒序
+                .orderByDesc(Article::getCreateDate)
+                //返回 limit 条
+                .last("LIMIT " + limit);
+
+        List<Article> list = articleMapper.selectList(wrapper);
+        // 不显示标签和作者信息
+        return copyList(list, false, false);
+    }
 
     /**
      * 发布文章
@@ -194,7 +223,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public Result publishArticle(ArticleParam articleParam) {
         //获取当前登录的用户,即发布文章的作者
-        SysUser sysUser = UserThreadLocal.get();
+        SysUser sysUser = SecurityUtils.getCurrentUser();
 
         Article article = new Article();
         boolean isEdit = false;
@@ -206,6 +235,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             article.setTitle(articleParam.getTitle());
             article.setSummary(articleParam.getSummary());
             article.setCategoryId(articleParam.getCategory().getId());
+            // 如果前端传了新的封面图，也更新它
+            if (StringUtils.isNotBlank(articleParam.getPictureUrl())) {
+                article.setPictureUrl(articleParam.getPictureUrl());
+            }
             articleMapper.updateById(article);
             isEdit = true;
         } else {
@@ -218,6 +251,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             article.setTitle(articleParam.getTitle());
             article.setSummary(articleParam.getSummary());
             article.setCategoryId(articleParam.getCategory().getId());
+            article.setPictureUrl(articleParam.getPictureUrl());
             article.setCreateDate(LocalDateTime.now());
             article.setCommentCounts(0);
             //插入文章后会生成一个id

@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import warren.myblog.common.Result;
-import warren.myblog.common.UserThreadLocal;
+
 import warren.myblog.mapper.ArticleMapper;
 import warren.myblog.mapper.CommentsMapper;
 import warren.myblog.pojo.Article;
@@ -14,6 +14,7 @@ import warren.myblog.pojo.Comment;
 import warren.myblog.pojo.SysUser;
 import warren.myblog.service.CommentsService;
 import warren.myblog.service.SysUserService;
+import warren.myblog.utils.SecurityUtils;
 import warren.myblog.vo.CommentVo;
 import warren.myblog.Params.CommentParam;
 import warren.myblog.vo.UserVo;
@@ -57,7 +58,8 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
     @Override
     public Result comment(CommentParam commentParam) {
 
-        SysUser sysUser = UserThreadLocal.get();
+        //获取当前登录的用户,即发布文章的作者
+        SysUser sysUser = SecurityUtils.getCurrentUser();
         Comment comment = new Comment();
 
         // 设置文章ID、评论人ID、评论内容
@@ -165,6 +167,8 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
      */
     @Override
     public Result deleteComment(Long commentId, SysUser currentUser) {
+
+
 
         // 1. 查找评论
         Comment comment = commentsMapper.selectById(commentId);

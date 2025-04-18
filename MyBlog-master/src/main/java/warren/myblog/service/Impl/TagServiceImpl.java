@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import warren.myblog.common.Result;
-import warren.myblog.common.UserThreadLocal;
+
 import warren.myblog.mapper.ArticleMapper;
 import warren.myblog.mapper.ArticleTagMapper;
 import warren.myblog.mapper.TagMapper;
@@ -18,6 +18,7 @@ import warren.myblog.pojo.Tag;
 import warren.myblog.service.TagService;
 import warren.myblog.Dto.TagDTO;
 import warren.myblog.Params.ErrorCode;
+import warren.myblog.utils.SecurityUtils;
 import warren.myblog.vo.TagVo;
 
 import java.util.ArrayList;
@@ -135,7 +136,8 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
      */
     @Override
     public Result addTag(TagDTO tagDto) {
-        SysUser sysUser = UserThreadLocal.get();
+
+        SysUser sysUser = SecurityUtils.getCurrentUser();
         Long sysUserId = sysUser.getId();
         Tag tag=new Tag();
         tag.setTagName(tagDto.getTagName());
@@ -153,8 +155,8 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Transactional  // 保证所有操作在同一事务内，要么全部成功，要么全部回滚
     @Override
     public Result removeTagById(Long id) {
-        // 从线程上下文获取当前登录用户
-        SysUser currentUser = UserThreadLocal.get();
+
+        SysUser currentUser = SecurityUtils.getCurrentUser();
         if (currentUser == null) {
             return Result.fail(ErrorCode.NO_LOGIN.getCode(), "未登录,不能删除标签,请先登录!");
         }

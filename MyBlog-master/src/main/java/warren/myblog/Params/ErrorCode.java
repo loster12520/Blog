@@ -19,7 +19,8 @@ public enum ErrorCode {
     USERINFO_GET_ERROR(10010,"无法获取用户信息"),
     ALERADAY_LIKES(10011,"您已点赞过该文章"),
     NO_PERMISSION(10012,"无访问权限"),
-    NO_LOGIN(10013,"未登录");
+    NO_LOGIN(10013,"未登录"),
+    FILE_UPLOAD_ERROR(20001,"图片上传失败");
 
     private int code;
     private String msg;

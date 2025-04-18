@@ -22,4 +22,7 @@ public class ArticleParam {
 
     private String searchKeyword;
 
+    /** 新增：前端上传完图片后传回的 URL */
+    private String pictureUrl;
+
 }

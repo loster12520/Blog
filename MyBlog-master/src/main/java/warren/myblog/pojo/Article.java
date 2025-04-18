@@ -23,6 +23,7 @@ public class Article {
     //浏览量
     private Integer viewCounts;
 
+    private String pictureUrl;
     /**
      * 作者id
      */
