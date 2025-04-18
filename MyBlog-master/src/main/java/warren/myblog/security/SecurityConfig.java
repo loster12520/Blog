@@ -105,7 +105,7 @@ public class SecurityConfig {
                         .requestMatchers("/doc.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
                         .requestMatchers("/src/**").permitAll()
                         // 其他所有请求均要求认证
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 ).exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler(accessDeniedHandler())
