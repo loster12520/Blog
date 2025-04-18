@@ -243,7 +243,7 @@ export default {
       getCommentsByArticle(this.article.id)
         .then((data) => {
           if (data.success) {
-            this.comments = data.data
+            this.comments = data.data.filter(item => item.level === 1)
             this.article.commentCounts = data.data.length
           } else {
             this.$message({ type: 'error', message: '评论加载失败', showClose: true })

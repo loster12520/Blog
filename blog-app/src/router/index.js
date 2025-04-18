@@ -31,11 +31,11 @@ const router = new Router({
     },
     {
       path: '',
-      name: 'Home',
       component: Home,
       children: [
         {
           path: '/',
+          name: "Home",
           component: r => require.ensure([], () => r(require('@/views/Index')), 'index')
         },
         {
@@ -110,8 +110,7 @@ router.beforeEach((to, from, next) => {
         message: '请先登录哦'
       })
 
-    }
-    else {
+    } else {
       next();
     }
   }

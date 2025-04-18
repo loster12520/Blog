@@ -53,6 +53,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(data => {
           if (data.success) {
+            console.log(data.data)
             commit('SET_ACCOUNT', data.data.account)
             commit('SET_NAME', data.data.nickname)
             commit('SET_AVATAR', data.data.avatar)

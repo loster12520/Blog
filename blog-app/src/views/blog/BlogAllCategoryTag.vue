@@ -166,15 +166,6 @@ export default {
     },
     // 新增标签方法：在添加之前将当前用户ID设置到 newTag.createId，再调用接口
     addNewTag() {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        this.$message({
-          type: 'warning',
-          message: '请先登录再添加标签',
-          showClose: true
-        });
-        return;
-      }
       if (!this.newTag.tagName.trim()) {
         this.$message.error('标签名称不能为空');
         return;
@@ -200,14 +191,6 @@ export default {
     // 批量删除标签方法：先判断登录状态，再检查是否都是当前用户添加的
     deleteSelectedTags() {
       console.log('deleteSelectedTags triggered');
-      if (!localStorage.getItem('token')) {
-        this.$message({
-          type: 'warning',
-          message: '请先登录再删除标签',
-          showClose: true
-        });
-        return;
-      }
       if (this.selectedTags.length === 0) {
         this.$message.error('请先选择要删除的标签');
         return;

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class SysUserVo {
+    private Long id;
     private String account;
     private String avatar;
     private String mobilePhoneNumber;

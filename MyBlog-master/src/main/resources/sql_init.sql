@@ -48,23 +48,6 @@ CREATE TABLE `ms_admin_permission`
 -- Table structure for ms_article
 -- ----------------------------
 DROP TABLE IF EXISTS `ms_article`;
-<<<<<<< HEAD
-CREATE TABLE `ms_article`
-(
-    `id`             bigint NOT NULL AUTO_INCREMENT,
-    `comment_counts` int NULL DEFAULT NULL COMMENT '评论数量',
-    `create_date`    datetime NULL DEFAULT NULL,
-    `summary`        varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '简介',
-    `title`          varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '标题',
-    `view_counts`    int NULL DEFAULT NULL COMMENT '浏览数量',
-    `weight`         int    NOT NULL COMMENT '是否置顶',
-    `author_id`      bigint NULL DEFAULT NULL COMMENT '作者id',
-    `body_id`        bigint NULL DEFAULT NULL COMMENT '内容id',
-    `category_id`    int NULL DEFAULT NULL COMMENT '类别id',
-    `likes`          int NULL DEFAULT NULL COMMENT '点赞数',
-    `collect`        int NULL DEFAULT NULL COMMENT '收藏数',
-    PRIMARY KEY (`id`) USING BTREE
-=======
 CREATE TABLE `ms_article`  (
                                `id` bigint NOT NULL AUTO_INCREMENT,
                                `comment_counts` int NULL DEFAULT NULL COMMENT '评论数量',
@@ -78,9 +61,8 @@ CREATE TABLE `ms_article`  (
                                `category_id` int NULL DEFAULT NULL COMMENT '类别id',
                                `likes` int NULL DEFAULT NULL COMMENT '点赞数',
                                `collect` int NULL DEFAULT NULL COMMENT '收藏数',
-                               `picture-url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '封面',
+                               `picture_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '封面',
                                PRIMARY KEY (`id`) USING BTREE
->>>>>>> 129a09a9d62a77f0914d885c1cb589e7b50629cf
 ) ENGINE = InnoDB AUTO_INCREMENT = 1903332362394615810 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -101,20 +83,6 @@ CREATE TABLE `ms_article_body`
 -- Table structure for ms_article_collect
 -- ----------------------------
 DROP TABLE IF EXISTS `ms_article_collect`;
-<<<<<<< HEAD
-CREATE TABLE `ms_article_collect`
-(
-    `id`          bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `article_id`  bigint NOT NULL COMMENT '文章ID',
-    `user_id`     bigint NOT NULL COMMENT '用户ID',
-    `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '收藏时间',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `uk_article_user`(`article_id` ASC, `user_id` ASC) USING BTREE,
-    INDEX         `user_id`(`user_id` ASC) USING BTREE,
-    CONSTRAINT `ms_article_collect_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `ms_article` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-    CONSTRAINT `ms_article_collect_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ms_sys_user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '文章收藏表' ROW_FORMAT = Dynamic;
-=======
 CREATE TABLE `ms_article_collect`  (
                                        `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
                                        `article_id` bigint NOT NULL COMMENT '文章ID',
@@ -126,7 +94,6 @@ CREATE TABLE `ms_article_collect`  (
                                        CONSTRAINT `ms_article_collect_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `ms_article` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
                                        CONSTRAINT `ms_article_collect_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `ms_sys_user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '文章收藏表' ROW_FORMAT = Dynamic;
->>>>>>> 129a09a9d62a77f0914d885c1cb589e7b50629cf
 
 -- ----------------------------
 -- Table structure for ms_article_like
