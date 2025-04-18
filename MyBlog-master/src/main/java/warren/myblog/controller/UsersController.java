@@ -21,7 +21,7 @@ public class UsersController {
      */
     @Operation(tags = "获取用户登录信息")
     @GetMapping("/currentUser")
-    public Result getCurrenUser(@RequestHeader("Authorization") String token){
+    public Result getCurrenUser(@RequestHeader("token") String token){
         return sysUserService.findUserByToken(token);
     }
 }

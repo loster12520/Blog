@@ -1,5 +1,6 @@
 package warren.myblog.security;
 
+import jakarta.servlet.Filter;
 import org.springframework.http.HttpMethod;
 
 import org.springframework.context.annotation.Bean;
@@ -9,11 +10,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -85,7 +88,7 @@ public class SecurityConfig {
                 // 启用 CORS 并配置跨域资源共享
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 // 关闭 CSRF 防护（JWT 已提供足够的安全性）
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 // 设置 Session 为无状态，适合基于 JWT 的认证
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 配置全局异常处理器
@@ -98,7 +101,9 @@ public class SecurityConfig {
                 // 定义请求授权规则
                 .authorizeHttpRequests(auth -> auth
                         // 允许 /public 接口无需认证（登录接口公开）
-                        .requestMatchers("/public/**", "/doc.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/doc.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
+                        .requestMatchers("/src/**").permitAll()
                         // 其他所有请求均要求认证
                         .anyRequest().authenticated()
                 ).exceptionHandling(exceptionHandling -> exceptionHandling

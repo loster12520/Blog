@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import warren.myblog.security.MyUserDetails;
 import warren.myblog.utils.JWTUtils;
 import warren.myblog.common.Result;
 import warren.myblog.pojo.SysUser;
@@ -38,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * 登录
+     *
      * @param loginParams 登录参数:账号,密码
      * @return 登录成功返回 Token，失败返回错误信息
      */
@@ -77,39 +81,46 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * 校验 Token 是否有效，必要时重新生成 Token
+     *
      * @param token 用户的 Token
      * @return 关联的 SysUser 对象，如果无效则返回 null
      */
     @Override
     public SysUser checkToken(String token) {
-        // 1. 判断 Token 是否为空
-        if (StringUtils.isBlank(token)) {
-            return null;
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // 2. 验证 Token 是否有效
-        Map<String, Object> claims = JWTUtils.checkToken(token);
-        if (claims == null) {
-            return null;
-        }
+        MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
 
-        // 3. 检查 Redis 是否存在 Token
-        String userJson = redisTemplate.opsForValue().get("TOKEN_" + token);
-        if (StringUtils.isBlank(userJson)) {
-            // Redis 里没有 Token，可能是过期了，尝试重新生成
-            String userId = claims.get("userId").toString();
-            SysUser sysUser = sysUserService.findUserById(Long.parseLong(userId));
+        return myUserDetails.getSysUser();
 
-            if (sysUser != null) {
-                // 重新生成 Token
-                String newToken = JWTUtils.createToken(String.valueOf(sysUser.getId()));
-                redisTemplate.opsForValue().set("TOKEN_" + newToken, JSON.toJSONString(sysUser), 1, TimeUnit.DAYS);
-                return sysUser;
-            }
-            return null;
-        }
-
-        return JSON.parseObject(userJson, SysUser.class);
+//        // 1. 判断 Token 是否为空
+//        if (StringUtils.isBlank(token)) {
+//            return null;
+//        }
+//
+//        // 2. 验证 Token 是否有效
+//        Map<String, Object> claims = JWTUtils.checkToken(token);
+//        if (claims == null) {
+//            return null;
+//        }
+//
+//        // 3. 检查 Redis 是否存在 Token
+//        String userJson = redisTemplate.opsForValue().get("TOKEN_" + token);
+//        if (StringUtils.isBlank(userJson)) {
+//            // Redis 里没有 Token，可能是过期了，尝试重新生成
+//            String userId = claims.get("userId").toString();
+//            SysUser sysUser = sysUserService.findUserById(Long.parseLong(userId));
+//
+//            if (sysUser != null) {
+//                // 重新生成 Token
+//                String newToken = JWTUtils.createToken(String.valueOf(sysUser.getId()));
+//                redisTemplate.opsForValue().set("TOKEN_" + newToken, JSON.toJSONString(sysUser), 1, TimeUnit.DAYS);
+//                return sysUser;
+//            }
+//            return null;
+//        }
+//
+//        return JSON.parseObject(userJson, SysUser.class);
     }
 
     /**

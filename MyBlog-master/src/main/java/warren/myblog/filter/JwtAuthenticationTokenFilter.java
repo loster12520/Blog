@@ -32,12 +32,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         // 1. 从请求头中获取 Token
         String token = request.getHeader("token");
-        System.out.println("1    " + token);
         if (!StringUtils.hasText(token) || token.equals("undefined")) {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println("2    " + token);
 
         // 2. 验证 Token 的有效性
         var claims = JWTUtils.checkToken(token);

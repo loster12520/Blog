@@ -25,14 +25,14 @@ export function getHotArtices() {
 
 export function getNewArtices() {
   return request({
-    url: '/public/articles/new',
+    url: '/public/article/new',
     method: 'get'
   })
 }
 
 export function viewArticle(id) {
   return request({
-    url: `/public/articles/view/${id}`,
+    url: `/public/article/view/${id}`,
     method: 'get'
   })
 }
@@ -69,7 +69,7 @@ export function listArchives() {
 
 export function getArticleById(id) {
   return request({
-    url: `/public/articles/view/${id}`,
+    url: `/public/article/view/${id}`,
     method: 'get'
   })
 }
@@ -86,7 +86,7 @@ export function removeArticlesBatch(ids, token) {
 // 这个传入可能有问题！！！！
 export function searchArticle(search) {
   return request({
-    url: '/public/articles/search',
+    url: '/public/article/search',
     method: 'post',
     data: {"search":search}
   })

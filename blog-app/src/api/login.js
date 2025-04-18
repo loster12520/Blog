@@ -23,7 +23,7 @@ export function logout(token) {
 
 export function getUserInfo(token) {
   return request({
-    url: '/users/currentUser',
+    url: '/sysuser/currentUser',
     method: 'get'
   })
 }
