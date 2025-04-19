@@ -45,7 +45,7 @@ public class TagController {
      *
      * @return
      */
-    @Operation(tags = "标签(前六条)", summary = "最热标签(前六条)")
+    @Operation(tags = "标签", summary = "最热标签(前六条)")
     @GetMapping("/public/tags/hot")
     public Result getHots() {
         int tagNumber = 6;

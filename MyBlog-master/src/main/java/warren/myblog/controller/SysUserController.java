@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import warren.myblog.common.Result;
+import warren.myblog.pojo.SysUser;
 import warren.myblog.service.SysUserService;
+import warren.myblog.vo.SysUserVo;
 
 /*
  * author: Warren
@@ -38,6 +40,15 @@ public class SysUserController {
     }
 
 
-
+    /**
+     * 修改用户信息
+     * @param sysUserVo
+     * @return
+     */
+    @Operation(tags = "用户相关",summary = "修改用户信息")
+    @PostMapping("/modify")
+    public Result modifyUserInfo(@RequestBody SysUserVo sysUserVo){
+        return sysUserService.modifyUserInfo(sysUserVo);
+    }
 
 }

@@ -2,6 +2,7 @@ package warren.myblog.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -30,6 +31,7 @@ import static warren.myblog.Params.ErrorCode.*;
 /*
  * author: Warren
  */
+@Slf4j
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
     @Autowired
@@ -158,6 +160,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public SysUser findUserById(Long authorId) {
         return sysUserMapper.selectById(authorId);
 
+    }
+
+    /**
+     * 更新用户信息
+     * @param sysUserVo 用户信息
+     * @return
+     */
+    @Override
+    public Result modifyUserInfo(SysUserVo sysUserVo) {
+        SysUser sysUser = new SysUser();
+
+        // 使用 BeanUtils.copyProperties 进行属性拷贝
+        BeanUtils.copyProperties(sysUserVo,sysUser);
+
+        // 执行更新操作
+        sysUserMapper.updateById(sysUser);
+        return Result.success("修改信息成功!");
     }
 
 }

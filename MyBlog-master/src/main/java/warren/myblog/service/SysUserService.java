@@ -3,6 +3,7 @@ package warren.myblog.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import warren.myblog.common.Result;
 import warren.myblog.pojo.SysUser;
+import warren.myblog.vo.SysUserVo;
 import warren.myblog.vo.UserVo;
 
 /*
@@ -45,6 +46,13 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     SysUser findUserById(Long authorId);
+
+    /**
+     * 修改用户信息
+     * @param sysUserVo 用户信息
+     * @return
+     */
+    Result modifyUserInfo(SysUserVo sysUserVo);
 
 //    /**
 //     * 点击用户头像获取用户详情

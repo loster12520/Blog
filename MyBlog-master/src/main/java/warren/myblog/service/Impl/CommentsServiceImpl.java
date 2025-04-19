@@ -167,9 +167,6 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
      */
     @Override
     public Result deleteComment(Long commentId, SysUser currentUser) {
-
-
-
         // 1. 查找评论
         Comment comment = commentsMapper.selectById(commentId);
         if (comment == null) {
@@ -189,6 +186,8 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comment> im
         // 4. 执行删除
         int rows = commentsMapper.deleteById(commentId);
         if (rows > 0) {
+            article.setCommentCounts(article.getCommentCounts()-1);
+            articleMapper.updateById(article); // 确保更新数据库中的评论数量
             return Result.success("删除成功!");
         } else {
             return Result.fail(500, "删除失败");
