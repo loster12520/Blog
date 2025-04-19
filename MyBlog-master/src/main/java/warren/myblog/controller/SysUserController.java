@@ -20,7 +20,7 @@ public class SysUserController {
      * 获取当前登录用户信息
      * @return
      */
-    @Operation(tags = "登录后获取用户详细信息")
+    @Operation(tags = "用户相关", summary = "登录后获取用户详细信息")
     @GetMapping("/currentUser")
     public Result getCurrenUser(){
         return sysUserService.getUserInfo();
@@ -31,7 +31,7 @@ public class SysUserController {
      * @param articleId 文章id
      * @return
      */
-    @Operation(tags = "点赞文章")
+    @Operation(tags = "用户相关", summary = "登录后获取用户详细信息")
     @GetMapping("/likes/{articleId}")
     public Result likes(@PathVariable Long articleId){
         return sysUserService.likes(articleId);

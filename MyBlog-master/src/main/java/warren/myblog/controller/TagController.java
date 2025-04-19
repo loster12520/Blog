@@ -18,31 +18,34 @@ public class TagController {
 
     /**
      * 新增标签
+     *
      * @param tagDto 标签对象
      * @return
      */
-    @Operation(tags = "新增标签")
+    @Operation(tags = "标签", summary = "新增标签")
     @PostMapping("/user/add")
-    public Result addTag(@RequestBody TagDTO tagDto){
+    public Result addTag(@RequestBody TagDTO tagDto) {
         return tagService.addTag(tagDto);
     }
 
     /**
      * 删除标签
+     *
      * @param id
      * @return
      */
-    @Operation(tags = "删除标签")
+    @Operation(tags = "标签", summary = "删除标签")
     @DeleteMapping("/user/{id}")
-    public Result removeTagById(@PathVariable("id") Long id){
-      return tagService.removeTagById(id);
+    public Result removeTagById(@PathVariable("id") Long id) {
+        return tagService.removeTagById(id);
     }
 
     /**
      * 获取最热标签,取前六条
+     *
      * @return
      */
-    @Operation(tags = "最热标签(前六条)")
+    @Operation(tags = "标签(前六条)", summary = "最热标签(前六条)")
     @GetMapping("/public/tags/hot")
     public Result getHots() {
         int tagNumber = 6;
@@ -52,9 +55,10 @@ public class TagController {
 
     /**
      * 查询所有标签
+     *
      * @return
      */
-    @Operation(tags = "查询所有标签")
+    @Operation(tags = "标签", summary = "查询所有标签")
     @GetMapping("/public/tags/list")
     public Result getAllTag() {
         return tagService.findAll();
@@ -62,9 +66,10 @@ public class TagController {
 
     /**
      * 导航栏-查询所有标签的详细信息
+     *
      * @return
      */
-    @Operation(tags = "导航-查询所有标签的详细信息")
+    @Operation(tags = "标签", summary = "导航-查询所有标签的详细信息")
     @GetMapping("/public/tags/detail")
     public Result getAllTagDetails() {
         return tagService.findAllTagsDetails();
@@ -72,12 +77,13 @@ public class TagController {
 
     /**
      * 实现点击标签可以查询到所有的文章(这里也调用了首页文章列表功能)
+     *
      * @param id 标签id
      * @return
      */
-    @Operation(tags = "实现点击标签可以查询到所有的文章")
+    @Operation(tags = "标签", summary = "实现点击标签可以查询到所有的文章")
     @GetMapping("/public/tags/detail/{id}")
-    public Result findAllDetailsById(@PathVariable("id")Long id) {
+    public Result findAllDetailsById(@PathVariable("id") Long id) {
         return tagService.findAllDetailsByTagId(id);
     }
 }

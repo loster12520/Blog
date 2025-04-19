@@ -103,15 +103,19 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    if (to.matched.some(r => r.meta.requireLogin)) {
-      Message({
-        type: 'warning',
-        showClose: true,
-        message: '请先登录哦'
-      })
-
-    } else {
+    if (to.path === '/register') {
       next();
+    } else {
+      if (to.matched.some(r => r.meta.requireLogin)) {
+        Message({
+          type: 'warning',
+          showClose: true,
+          message: '请先登录哦'
+        });
+        next({path: '/login'}); // 重定向到登录页面
+      } else {
+        next();
+      }
     }
   }
 })

@@ -56,8 +56,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * 拷贝属性(将article集合转为articleVo)
      *
      * @param articleRecords 文章
-     * @param isTag 是否需要返回标签
-     * @param isAuthor 是否需要返回作者信息
+     * @param isTag          是否需要返回标签
+     * @param isAuthor       是否需要返回作者信息
      * @return
      */
     private List<ArticleVo> copyList(List<Article> articleRecords, Boolean isTag, Boolean isAuthor) {
@@ -71,7 +71,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     /**
      * 拷贝属性(将article转为articleVo)
      *
-     * @param article 文章
+     * @param article    文章
      * @param isTag      是否需要标签
      * @param isAuthor   是否需要作者
      * @param isBody     是否需要文章内容
@@ -107,9 +107,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
 
-
     /**
      * 首页-文章列表功能,归档功能也一并完成了
+     *
      * @param pageParams 分页参数,包含page,pageSize,categoryId等
      * @return
      */
@@ -122,6 +122,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 最热文章
+     *
      * @param limit 需要显示的最热文章数
      * @return
      */
@@ -158,6 +159,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 文章归档
+     *
      * @return
      */
     @Override
@@ -168,6 +170,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 获取文章详情
+     *
      * @param id 文章id
      * @return
      */
@@ -190,9 +193,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 查询同一分类下的相关文章，排除当前文章，并按发布时间倒序返回最多 limit 篇
-     * @param categoryId 分类id
+     *
+     * @param categoryId       分类id
      * @param currentArticleId 当前阅读的文章id
-     * @param limit 限制返回的相关文章数
+     * @param limit            限制返回的相关文章数
      * @return
      */
     public List<ArticleVo> findRelatedArticles(Long categoryId, Long currentArticleId, int limit) {
@@ -217,6 +221,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * authorId 就是当前登录用户的id
      * 拿到标签 发布文章后会生成一个文章id 这时需要将标签和文章关联起来
      * 存储文章内容body
+     *
      * @param articleParam 和文章有关的参数
      * @return
      */
@@ -284,6 +289,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 删除文章
+     *
      * @param ids 需要删除的文章的id集合
      * @return
      */
@@ -326,6 +332,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 文章搜索
+     *
      * @param searchKeyword 和文章标题有关的关键词
      * @return
      */

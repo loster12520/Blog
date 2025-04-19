@@ -20,9 +20,10 @@ public class CategoryController {
 
     /**
      * 获取所有分类
+     *
      * @return
      */
-    @Operation(tags = "获取所有文章分类")
+    @Operation(tags = "分类", summary = "获取所有文章分类")
     @GetMapping("/list")
     public Result getAllCategory() {
         return categoryService.findAllCategory();
@@ -30,9 +31,10 @@ public class CategoryController {
 
     /**
      * 导航栏的文章分类功能
+     *
      * @return
      */
-    @Operation(tags = "导航栏的文章分类功能")
+    @Operation(tags = "分类", summary = "获取所有文章分类")
     @GetMapping("/detail")
     public Result getAllCategoryDetails() {
         return categoryService.findAllCategoryDetails();
@@ -40,9 +42,10 @@ public class CategoryController {
 
     /**
      * 点击导航栏文章分类后, 在文章列表上面显示当前分类和该分类下的文章(这里直接调用了首页文章列表功能)
+     *
      * @return
      */
-    @Operation(tags = "点击导航栏后显示文章分类和该分类下文章")
+    @Operation(tags = "分类", summary = "获取所有文章分类")
     @GetMapping("/detail/{id}")
     public Result findCategoryDetailsById(@PathVariable("id") Long id) {
         return categoryService.findCategoryDetailsById(id);

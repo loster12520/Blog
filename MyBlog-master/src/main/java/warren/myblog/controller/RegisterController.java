@@ -25,7 +25,7 @@ public class RegisterController {
      * @param sysUser 用户对象
      * @return
      */
-    @Operation(tags = "注册")
+    @Operation(tags = "用户相关", summary = "注册")
     @PostMapping("/public/register")
     public Result register(@RequestBody SysUser sysUser){
         return registerService.register(sysUser);

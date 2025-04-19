@@ -25,7 +25,7 @@ public class UploadController {
     @Autowired
     private QiniuUtils qiniuUtils;
 
-    @Operation(tags="上传图片")
+    @Operation(tags = "上传图片")
     @PostMapping("/user/upload")
     public Result upload(@RequestParam("image") MultipartFile file) {
         String fileName = UUID.randomUUID().toString() + "." + StringUtils.substringAfterLast(file.getOriginalFilename(), ".");

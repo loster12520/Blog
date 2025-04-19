@@ -22,7 +22,7 @@ public class LoginController {
      * @param loginParams 用户对象,包含账户名和密码
      * @return
      */
-    @Operation(tags = "登录")
+    @Operation(tags = "用户相关", summary = "登录")
     @PostMapping("/public/login")
     public Result login(@RequestBody LoginParams loginParams) {
         return loginService.login(loginParams);

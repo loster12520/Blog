@@ -29,7 +29,7 @@ public class CommentController {
      * @param articleId
      * @return
      */
-    @Operation(tags = "查询文章下的所有评论")
+    @Operation(tags = "评论", summary = "查询文章下的所有评论")
     @GetMapping("/public/comment/listComments/{articleId}")
     public Result comments(@PathVariable Long articleId) {
         return commentsService.findCommentsByArticleId(articleId);
@@ -40,7 +40,7 @@ public class CommentController {
      * @param commentParam 评论参数
      * @return
      */
-    @Operation(tags = "评论")
+    @Operation(tags = "评论", summary = "添加评论")
     @PostMapping("/user/remark")
     public Result comment(@RequestBody CommentParam commentParam) {
         return commentsService.comment(commentParam);
@@ -52,7 +52,7 @@ public class CommentController {
      * @param params 一个map,包含评论id和当前登录用户
      * @return
      */
-    @Operation(tags = "删除评论")
+    @Operation(tags = "评论", summary = "删除评论")
     @PostMapping("/user/deleteComment")
     public Result deleteComment(@RequestBody Map<String, Long> params) {
         Long commentId = params.get("commentId");

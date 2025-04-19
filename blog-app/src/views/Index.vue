@@ -64,6 +64,7 @@ export default {
           this.newArticles = data.data
         })
         .catch((error) => {
+          console.log(error)
           if (error !== 'error') {
             this.$message({ type: 'error', message: '最新文章加载失败!', showClose: true })
           }

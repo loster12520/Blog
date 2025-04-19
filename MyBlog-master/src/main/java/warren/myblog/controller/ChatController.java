@@ -1,5 +1,6 @@
 package warren.myblog.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 @RestController
-@RequestMapping("/ai")
+@RequestMapping("/public/ai")
 public class ChatController {
     private final ChatClient chatClient;
 
@@ -21,8 +22,9 @@ public class ChatController {
         ).build();
     }
 
+    @Operation(tags = "AI", summary = "文本聊天")
     @PostMapping(value="/chat",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> chat2(@RequestBody String message) {
+    public Flux<String> chat(@RequestBody String message) {
         return chatClient.prompt()
                 .user(message)
                 .stream()
