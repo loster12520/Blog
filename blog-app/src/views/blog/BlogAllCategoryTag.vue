@@ -88,8 +88,9 @@
 
 <script>
 import defaultAvatar from '@/assets/img/4.png';
-import { getAllCategorysDetail } from '@/api/category';
-import { getAllTagsDetail, addTag, removeTag } from '@/api/tag';
+import {getAllCategorysDetail} from '@/api/category';
+import {getAllTagsDetail, addTag, removeTag} from '@/api/tag';
+import {getToken} from '@/request/token'
 
 export default {
   name: 'BlogAllCategoryTag',
@@ -125,12 +126,12 @@ export default {
     },
     // 当前登录用户的ID，从 localStorage 获取（转换为数字）
     currentUserId() {
-      return Number(localStorage.getItem('userId'));
+      return this.$store.state.id;
     }
   },
   methods: {
     view(id) {
-      this.$router.push({ path: `/${this.currentActiveName}/${id}` });
+      this.$router.push({path: `/${this.currentActiveName}/${id}`});
     },
     getCategorys() {
       getAllCategorysDetail()
@@ -216,21 +217,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(() => {
+        .then(async () => {
           console.log('用户确认删除，开始发起删除请求');
-          Promise.all(this.selectedTags.map((id) => {
-            console.log(`开始删除标签，ID: ${id}`);
-            return removeTag(id);
-          }))
-            .then(() => {
-              this.$message.success('删除标签成功');
-              this.selectedTags = [];
-              this.getTags();
-            })
-            .catch((err) => {
-              console.error('批量删除错误:', err);
-              this.$message.error('删除标签时发生错误');
-            });
+          try {
+            // 使用 Promise.all 等待所有删除操作完成
+            await Promise.all(this.selectedTags.map((id) => {
+              console.log(`开始删除标签，ID: ${id}`);
+              return removeTag(id);
+            }));
+            console.log('所有标签删除成功');
+            this.$message.success('删除标签成功');
+            this.selectedTags = [];
+            this.getTags();
+          } catch (err) {
+            console.error('批量删除错误:', err);
+            this.$message.error('删除标签时发生错误');
+          }
         })
         .catch(() => {
           console.log('用户取消删除');
@@ -252,12 +254,15 @@ export default {
 .me-allct-body {
   margin: 60px auto 140px;
 }
+
 .me-allct-container {
   width: 1000px;
 }
+
 .me-allct-items {
   padding-top: 2rem;
 }
+
 .me-allct-item {
   width: 25%;
   display: inline-block;
@@ -267,10 +272,12 @@ export default {
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .me-allct-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
+
 .me-allct-content {
   display: inline-block;
   width: 100%;
@@ -280,17 +287,21 @@ export default {
   text-align: center;
   padding: 1.5rem 0;
 }
+
 .me-allct-content:hover {
   border-color: #409eff;
   background-color: #f9f9f9;
 }
+
 .me-allct-info {
   cursor: pointer;
   transition: color 0.3s ease;
 }
+
 .me-allct-info:hover {
   color: #409eff;
 }
+
 .me-allct-img {
   margin: -40px 0 10px;
   width: 60px;
@@ -298,9 +309,11 @@ export default {
   vertical-align: middle;
   transition: transform 0.3s ease;
 }
+
 .me-allct-img:hover {
   transform: scale(1.1);
 }
+
 .me-allct-name {
   font-size: 21px;
   font-weight: 150;
@@ -310,19 +323,23 @@ export default {
   margin-top: 4px;
   transition: color 0.3s ease;
 }
+
 .me-allct-name:hover {
   color: #409eff;
 }
+
 .me-allct-description {
   min-height: 50px;
   font-size: 13px;
   line-height: 25px;
 }
+
 .me-allct-meta {
   font-size: 12px;
   color: #969696;
   transition: color 0.3s ease;
 }
+
 .me-allct-meta:hover {
   color: #666;
 }

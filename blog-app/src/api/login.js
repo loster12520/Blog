@@ -21,10 +21,18 @@ export function logout(token) {
   return removeToken()
 }
 
-export function getUserInfo(token) {
+export function getUserInfo() {
   return request({
     url: '/sysuser/currentUser',
     method: 'get'
+  })
+}
+
+export function setUserInfo(data) {
+  return request({
+    url: '/sysuser/modify',
+    method: 'post',
+    data
   })
 }
 

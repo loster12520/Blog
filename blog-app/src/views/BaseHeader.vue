@@ -65,7 +65,7 @@
               <template slot="title">
                 <img class="me-header-picture" :src="user.avatar" alt="头像"/>
               </template>
-              <el-menu-item index @click="logout">
+              <el-menu-item index @click="details">
                 个人信息
               </el-menu-item>
               <br/>

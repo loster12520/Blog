@@ -51,9 +51,9 @@ export function addTag(data) {
 
 // 删除标签
 export function removeTag(id) {
-  console.log(`尝试删除标签，ID: ${id}，Token: ${token}`);
+  console.log(`尝试删除标签，ID: ${id}`);
   return request({
-    url: `/user/{id}`,
+    url: `/user/${id}`,
     method: 'delete'
   });
 }

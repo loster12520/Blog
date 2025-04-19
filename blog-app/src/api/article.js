@@ -52,7 +52,7 @@ export function viewArticle(id) {
 // }
 
 
-export function publishArticle(article,token) {
+export function publishArticle(article, token) {
   return request({
     url: '/user/publish',
     method: 'post',
@@ -88,6 +88,13 @@ export function searchArticle(search) {
   return request({
     url: '/public/article/search',
     method: 'post',
-    data: {"search":search}
+    data: {"search": search}
+  })
+}
+
+export function like(articleID) {
+  return request({
+    url: `/sysuser/likes/${articleID}`,
+    method: 'get'
   })
 }

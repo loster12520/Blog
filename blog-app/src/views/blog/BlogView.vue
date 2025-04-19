@@ -4,9 +4,14 @@
       <el-main>
         <div class="me-view-card">
           <h1 class="me-view-title">{{ article.title }}</h1>
+          <i
+            :class="[isLiked ? 'el-icon-star-on' : 'el-icon-star-off']"
+            @click="toggleLike"
+            style="margin-left: 10px; cursor: pointer; color: #999; font-size: 24px;"
+          ></i>
           <div class="me-view-author">
             <a>
-              <img class="me-view-picture" :src="article.author.avatar" />
+              <img class="me-view-picture" :src="article.author.avatar"/>
             </a>
             <div class="me-view-info">
               <span>{{ article.author.nickname }}</span>
@@ -93,7 +98,7 @@
               <el-row :gutter="20">
                 <el-col :span="2">
                   <a>
-                    <img class="me-view-picture" :src="avatar" />
+                    <img class="me-view-picture" :src="avatar"/>
                   </a>
                 </el-col>
                 <el-col :span="22">
@@ -138,7 +143,7 @@
                   :index="index"
                   :rootCommentCounts="comments.length"
                   @remove-comment="handleRemoveComment"
-                  @commentCountsIncrement="commentCountsIncrement"
+                  @commentCountsIncrement="handleRemoveComment"
                 />
               </transition-group>
             </div>
@@ -152,8 +157,8 @@
 <script>
 import MarkdownEditor from '@/components/markdown/MarkdownEditor'
 import CommmentItem from '@/components/comment/CommentItem'
-import { viewArticle, removeArticlesBatch } from '@/api/article'
-import { getCommentsByArticle, publishComment } from '@/api/comment'
+import {viewArticle, removeArticlesBatch, like} from '@/api/article'
+import {getCommentsByArticle, publishComment} from '@/api/comment'
 import default_avatar from '@/assets/img/3.png'
 
 export default {
@@ -187,7 +192,8 @@ export default {
       comment: {
         article: {},
         content: ''
-      }
+      },
+      isLiked: false,
     }
   },
   computed: {
@@ -200,11 +206,16 @@ export default {
     }
   },
   methods: {
+    toggleLike() {
+      this.isLiked = !this.isLiked; // 切换点赞状态
+      console.log(this.article.id)
+      like(this.article.id); // 调用发送请求的方法
+    },
     tagOrCategory(type, id) {
-      this.$router.push({ path: `/${type}/${id}` })
+      this.$router.push({path: `/${type}/${id}`})
     },
     editArticle() {
-      this.$router.push({ path: `/write/${this.article.id}` })
+      this.$router.push({path: `/write/${this.article.id}`})
     },
     getArticle() {
       viewArticle(this.$route.params.id)
@@ -215,27 +226,27 @@ export default {
         })
         .catch((error) => {
           if (error !== 'error') {
-            this.$message({ type: 'error', message: '文章加载失败', showClose: true })
+            this.$message({type: 'error', message: '文章加载失败', showClose: true})
           }
         })
     },
     publishComment() {
       if (!this.comment.content) return
       this.comment.article.id = this.article.id
-      const parms = { articleId: this.article.id, content: this.comment.content }
+      const parms = {articleId: this.article.id, content: this.comment.content}
       publishComment(parms, this.$store.state.token)
         .then((data) => {
           if (data.success) {
-            this.$message({ type: 'success', message: '评论成功', showClose: true })
+            this.$message({type: 'success', message: '评论成功', showClose: true})
             this.comment.content = ''
             this.getCommentsByArticle()
           } else {
-            this.$message({ type: 'error', message: data.msg, showClose: true })
+            this.$message({type: 'error', message: data.msg, showClose: true})
           }
         })
         .catch((error) => {
           if (error !== 'error') {
-            this.$message({ type: 'error', message: '评论失败', showClose: true })
+            this.$message({type: 'error', message: '评论失败', showClose: true})
           }
         })
     },
@@ -246,21 +257,19 @@ export default {
             this.comments = data.data.filter(item => item.level === 1)
             this.article.commentCounts = data.data.length
           } else {
-            this.$message({ type: 'error', message: '评论加载失败', showClose: true })
+            this.$message({type: 'error', message: '评论加载失败', showClose: true})
           }
         })
         .catch((error) => {
           if (error !== 'error') {
-            this.$message({ type: 'error', message: '评论加载失败', showClose: true })
+            this.$message({type: 'error', message: '评论加载失败', showClose: true})
           }
         })
-    },
-    commentCountsIncrement() {
-      this.getCommentsByArticle()
     },
     handleRemoveComment(commentId) {
       this.comments = this.comments.filter(item => item.id !== commentId)
       this.article.commentCounts = this.comments.length
+      this.getCommentsByArticle()
     },
     deleteArticle() {
       this.$confirm('确定要删除这篇文章吗？', '提示', {
@@ -318,10 +327,12 @@ export default {
 }
 
 .me-view-body {
+  background-color: rgba(255, 255, 255, 0.8);
   margin: 100px auto 140px;
   transition: transform 0.3s ease;
   animation: fadeUp 0.6s ease-out;
 }
+
 .me-view-body:hover {
   transform: translateY(-3px);
 }
@@ -330,6 +341,7 @@ export default {
   width: 800px;
   transition: box-shadow 0.3s ease;
 }
+
 .me-view-container:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -340,11 +352,12 @@ export default {
 
 /* 标题加大一点 */
 .me-view-title {
-  font-size: 36px;      /* 加大文章标题字号 */
+  font-size: 36px; /* 加大文章标题字号 */
   font-weight: 800;
   line-height: 1.3;
   transition: color 0.3s ease, letter-spacing 0.3s ease;
 }
+
 .me-view-title:hover {
   color: #409eff;
   letter-spacing: 1px;
@@ -355,6 +368,7 @@ export default {
   vertical-align: middle;
   transition: transform 0.3s ease;
 }
+
 .me-view-author:hover {
   transform: translateX(5px);
 }
@@ -368,6 +382,7 @@ export default {
   background-color: #5fb878;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .me-view-picture:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -379,6 +394,7 @@ export default {
   margin-left: 8px;
   transition: transform 0.3s ease;
 }
+
 .me-view-info:hover {
   transform: translateY(-2px);
 }
@@ -388,6 +404,7 @@ export default {
   color: #969696;
   transition: color 0.3s ease;
 }
+
 .me-view-meta:hover {
   color: #409eff;
 }
@@ -396,6 +413,7 @@ export default {
   margin-top: 20px;
   transition: opacity 0.3s ease;
 }
+
 .me-view-end:hover {
   opacity: 0.8;
 }
@@ -408,6 +426,7 @@ export default {
   transition: border-color 0.3s ease;
   font-size: 16px; /* 原15px -> 16px */
 }
+
 .me-view-tag:hover {
   border-left-color: #409eff;
 }
@@ -417,10 +436,12 @@ export default {
   font-size: 15px; /* 原14px -> 15px */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .me-view-tag .el-button:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 4px 8px rgba(64, 158, 255, 0.2);
 }
+
 .me-view-tag .el-button:active {
   transform: scale(0.95);
 }
@@ -429,6 +450,7 @@ export default {
   margin: 0 4px;
   transition: transform 0.2s ease;
 }
+
 .me-view-tag-item:hover {
   transform: scale(1.1);
 }
@@ -438,6 +460,7 @@ export default {
   margin-top: 60px;
   transition: transform 0.3s ease;
 }
+
 .me-view-comment:hover {
   transform: translateY(-3px);
 }
@@ -450,6 +473,7 @@ export default {
   transition: border-color 0.3s ease;
   font-size: 18px; /* 加大评论标题字号 */
 }
+
 .me-view-comment-title:hover {
   border-color: #409eff;
 }
@@ -464,6 +488,7 @@ export default {
   font-size: 18px; /* 加大评论输入框文字 */
   transition: background-color 0.3s ease;
 }
+
 .me-view-comment-text:hover {
   background-color: rgba(64, 158, 255, 0.05);
 }
@@ -473,10 +498,12 @@ export default {
   transition: transform 0.3s ease, font-size 0.3s ease;
   font-size: 15px; /* 原13px -> 15px */
 }
+
 .me-action-button:hover {
   transform: translateY(-2px) scale(1.05);
   font-size: 16px;
 }
+
 .me-action-button:active {
   transform: scale(0.95);
 }
@@ -486,10 +513,12 @@ export default {
   font-size: 16px; /* 原14px -> 16px */
   color: #409eff;
 }
+
 .me-comment-button:hover {
   transform: translateY(-2px) scale(1.05);
   font-size: 17px;
 }
+
 .me-comment-button:active {
   transform: scale(0.95);
 }
@@ -499,6 +528,7 @@ export default {
 .list-leave-active {
   transition: all 0.5s;
 }
+
 .list-enter,
 .list-leave-to {
   opacity: 0;
@@ -508,7 +538,7 @@ export default {
 /* ============ 文章正文字体增强 ============ */
 /* 使用 ::v-deep 或 >>> 穿透 scoped 限制，覆盖 mavon-editor 渲染的 markdown-body */
 .me-view-content ::v-deep .markdown-body {
-  font-size: 20px;       /* 整体正文字号更大 */
+  font-size: 20px; /* 整体正文字号更大 */
   line-height: 1.85;
   font-family: "Microsoft YaHei", sans-serif;
 }
@@ -518,10 +548,12 @@ export default {
   font-size: 2.2em;
   margin: 0.6em 0 0.4em;
 }
+
 .me-view-content ::v-deep .markdown-body h2 {
   font-size: 1.8em;
   margin: 0.6em 0 0.4em;
 }
+
 .me-view-content ::v-deep .markdown-body h3 {
   font-size: 1.6em;
   margin: 0.5em 0 0.3em;
@@ -529,8 +561,8 @@ export default {
 
 /* ============ 代码块增强 ============ */
 .me-view-content ::v-deep .markdown-body pre {
-  font-size: 18px;         /* 代码块的字体也增大 */
-  line-height: 1.65;       /* 代码行距 */
+  font-size: 18px; /* 代码块的字体也增大 */
+  line-height: 1.65; /* 代码行距 */
   background-color: #f7f7f7;
   padding: 1em;
   overflow: auto;
@@ -544,5 +576,9 @@ export default {
   background: #f7f7f7;
   padding: 0.2em 0.4em;
   border-radius: 4px;
+}
+
+.liked {
+  color: #ff4d4f !important; /* 红色 */
 }
 </style>

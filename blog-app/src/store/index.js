@@ -34,11 +34,11 @@ export default new Vuex.Store({
     login({commit}, user) {
       return new Promise((resolve, reject) => {
         login(user.account, user.password).then(data => {
-          if(data.success){
+          if (data.success) {
             commit('SET_TOKEN', data.data)
             setToken(data.data)
             resolve()
-          }else{
+          } else {
             reject(data.msg)
           }
         }).catch(error => {
@@ -80,21 +80,12 @@ export default new Vuex.Store({
     // 退出
     logout({commit, state}) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(data => {
-          if(data.success){
-
-            commit('SET_TOKEN', '')
-            commit('SET_ACCOUNT', '')
-            commit('SET_NAME', '')
-            commit('SET_AVATAR', '')
-            commit('SET_ID', '')
-            removeToken()
-            resolve()
-          }
-
-        }).catch(error => {
-          reject(error)
-        })
+        logout(state.token)
+        commit('SET_TOKEN', '')
+        commit('SET_ACCOUNT', '')
+        commit('SET_NAME', '')
+        commit('SET_AVATAR', '')
+        commit('SET_ID', '')
       })
     },
     // 前端 登出
@@ -114,11 +105,11 @@ export default new Vuex.Store({
     register({commit}, user) {
       return new Promise((resolve, reject) => {
         register(user.account, user.nickname, user.password).then((data) => {
-          if(data.success){
+          if (data.success) {
             commit('SET_TOKEN', data.data)
             setToken(data.data)
             resolve()
-          }else{
+          } else {
             reject(data.msg)
           }
         }).catch((error) => {

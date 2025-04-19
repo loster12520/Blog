@@ -1,8 +1,6 @@
 package warren.myblog.utils;
 
 import com.alibaba.fastjson2.JSON;
-import com.google.gson.Gson;
-import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;

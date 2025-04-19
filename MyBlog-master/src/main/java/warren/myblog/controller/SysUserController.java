@@ -25,6 +25,7 @@ public class SysUserController {
     @Operation(tags = "用户相关", summary = "登录后获取用户详细信息")
     @GetMapping("/currentUser")
     public Result getCurrenUser(){
+        System.out.println(sysUserService.getUserInfo());
         return sysUserService.getUserInfo();
     }
 
@@ -48,6 +49,7 @@ public class SysUserController {
     @Operation(tags = "用户相关",summary = "修改用户信息")
     @PostMapping("/modify")
     public Result modifyUserInfo(@RequestBody SysUserVo sysUserVo){
+        System.out.println(sysUserService.modifyUserInfo(sysUserVo));
         return sysUserService.modifyUserInfo(sysUserVo);
     }
 

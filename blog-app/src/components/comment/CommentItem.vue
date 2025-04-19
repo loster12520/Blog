@@ -229,13 +229,13 @@ export default {
           const token = this.$store.state.token
           deleteCommentAPI(childComment.id, token)
             .then(res => {
-              if (res === '删除成功!') {
+              if (res.data === '删除成功!') {
                 this.$message.success('删除成功')
                 // 过滤掉被删除的子评论
                 this.comment.childrens = this.comment.childrens.filter(c => c.id !== childComment.id)
                 this.$emit('commentCountsIncrement') // 触发评论数量更新
               } else {
-                this.$message.error(res || '删除失败')
+                this.$message.error(res.data || '删除失败')
               }
             })
             .catch(err => {

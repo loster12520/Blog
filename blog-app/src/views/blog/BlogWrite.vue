@@ -1,6 +1,6 @@
 <template>
   <div id="write" v-title :data-title="title">
-    <el-container>
+    <el-container class="container">
       <base-header :simple=true>
         <el-col :span="4" :offset="2">
           <div class="me-write-info">写文章</div>
@@ -30,7 +30,7 @@
         </el-main>
       </el-container>
 
-      <el-dialog title="摘要 分类 标签"
+      <el-dialog title="发布设置"
                  :visible.sync="publishVisible"
                  :close-on-click-modal="false"
                  custom-class="me-dialog">

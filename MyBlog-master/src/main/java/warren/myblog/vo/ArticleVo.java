@@ -49,4 +49,6 @@ public class ArticleVo {
 
     private List<ArticleVo>relatedArticles;
 
+    private String pictureUrl;
+
 }
