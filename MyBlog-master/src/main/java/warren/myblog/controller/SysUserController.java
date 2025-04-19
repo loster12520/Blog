@@ -31,7 +31,7 @@ public class SysUserController {
      * @param articleId 文章id
      * @return
      */
-    @Operation(tags = "用户相关", summary = "登录后获取用户详细信息")
+    @Operation(tags = "用户相关", summary = "点赞文章")
     @GetMapping("/likes/{articleId}")
     public Result likes(@PathVariable Long articleId){
         return sysUserService.likes(articleId);

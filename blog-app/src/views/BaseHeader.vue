@@ -4,7 +4,7 @@
       <!-- Logo 区域 -->
       <el-col :span="2" class="me-header-left">
         <router-link to="/" class="me-title">
-          <img src="../assets/img/4.png" alt="Logo" />
+          <img src="../assets/img/4.png" alt="Logo"/>
         </router-link>
       </el-col>
 
@@ -63,8 +63,12 @@
             <!-- 修改判断：只要是 /write 相关路径（包括编辑页 /write/:id）都不显示 -->
             <el-submenu v-if="!isWritePage" index>
               <template slot="title">
-                <img class="me-header-picture" :src="user.avatar" alt="头像" />
+                <img class="me-header-picture" :src="user.avatar" alt="头像"/>
               </template>
+              <el-menu-item index @click="logout">
+                个人信息
+              </el-menu-item>
+              <br/>
               <el-menu-item index @click="logout">
                 <i class="el-icon-back"></i>退出
               </el-menu-item>
@@ -77,7 +81,7 @@
 </template>
 
 <script>
-import { searchArticle } from '@/api/article'
+import {searchArticle} from '@/api/article'
 
 export default {
   name: 'BaseHeader',
@@ -98,7 +102,7 @@ export default {
     user() {
       const login = this.$store.state.account.length !== 0
       const avatar = this.$store.state.avatar
-      return { login, avatar }
+      return {login, avatar}
     },
     // 判断当前是否为写文章相关页面（包括 /write 和 /write/:id）
     isWritePage() {
@@ -106,14 +110,17 @@ export default {
     }
   },
   methods: {
+    details() {
+      this.$router.push("userDetail")
+    },
     logout() {
       this.$store.dispatch('logout')
         .then(() => {
-          this.$router.push({ path: '/' })
+          this.$router.push({path: '/'})
         })
         .catch(error => {
           if (error !== 'error') {
-            this.$message({ message: error, type: 'error', showClose: true })
+            this.$message({message: error, type: 'error', showClose: true})
           }
         })
     },
@@ -131,7 +138,7 @@ export default {
     },
     // 选择某个搜索结果时跳转到对应文章详情
     handleSelect(item) {
-      this.$router.push({ path: '/view/' + item.id })
+      this.$router.push({path: '/view/' + item.id})
     }
   }
 }
@@ -174,10 +181,12 @@ export default {
   transition: transform 0.3s ease, font-size 0.3s ease;
   font-size: 14px;
 }
+
 .me-header .el-menu-item:hover {
   transform: translateY(-2px) scale(1.05);
   font-size: 15px;
 }
+
 .me-header .el-menu-item:active {
   transform: scale(0.95);
 }

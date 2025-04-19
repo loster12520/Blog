@@ -160,29 +160,4 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     }
 
-//    /**
-//     * 点击用户头像获取用户详情
-//     * @return
-//     */
-//    @Override
-//    public Result getUserDetails() {
-//        // 1. 获取当前用户的 ID
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null || !authentication.isAuthenticated()) {
-//            return Result.fail(NO_LOGIN.getCode(),NO_LOGIN.getMsg());
-//        }
-//
-//        Object principal = authentication.getPrincipal();
-//        Long userId;
-//        if (principal instanceof MyUserDetails) {
-//            userId = ((MyUserDetails) principal).getSysUser().getId();
-//        } else {
-//            return Result.fail(USERINFO_GET_ERROR.getCode(), USERINFO_GET_ERROR.getMsg());
-//        }
-//        SysUserVo sysUserVo=new SysUserVo();
-//        SysUser sysUser = sysUserMapper.selectById(userId);
-//        BeanUtils.copyProperties(sysUser,sysUserVo);
-//        return Result.success(sysUserVo);
-//    }
-
 }

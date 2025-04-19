@@ -200,7 +200,7 @@ export default {
           const token = this.$store.state.token
           deleteCommentAPI(aComment.id, token)
             .then(res => {
-              if (res === '删除成功!') {
+              if (res.data === '删除成功!') {
                 this.$message.success('删除成功')
                 this.$emit('remove-comment', aComment.id)
               } else {
