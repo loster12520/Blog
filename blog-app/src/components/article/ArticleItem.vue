@@ -4,7 +4,7 @@
     <a class="me-article-container" @click="view(id)">
       <!-- 新增的头像区域 -->
       <div class="me-article-avatar">
-        <el-avatar :size="50" :src="pictureUrl" fit="cover"></el-avatar>
+        <img :src="pictureUrl" class="img"></img>
       </div>
       <!-- 分割线 -->
       <div class="me-article-divider"></div>
@@ -229,5 +229,9 @@ export default {
 
 .me-pull-right {
   float: right;
+}
+
+.img{
+  width: 100%;
 }
 </style>

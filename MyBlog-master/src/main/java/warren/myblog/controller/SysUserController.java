@@ -25,7 +25,6 @@ public class SysUserController {
     @Operation(tags = "用户相关", summary = "登录后获取用户详细信息")
     @GetMapping("/currentUser")
     public Result getCurrenUser(){
-        System.out.println(sysUserService.getUserInfo());
         return sysUserService.getUserInfo();
     }
 

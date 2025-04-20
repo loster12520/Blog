@@ -4,12 +4,10 @@
       <div class="user-info">
         <!-- 头像区域 -->
         <div class="avatar-container">
-          <el-avatar
-            :size="100"
+          <img
             :src="userForm.avatar"
-            fit="cover"
             class="avatar"
-          ></el-avatar>
+          ></img>
           <div class="avatar-upload" v-if="isEditing">
             <el-upload
               class="avatar-uploader"
@@ -310,6 +308,8 @@ export default {
 }
 
 .avatar{
+  width: 100%;
+  height: auto;
   text-align: center;
 }
 </style>
