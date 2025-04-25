@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import warren.myblog.common.Result;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/public/ai")
@@ -23,13 +23,11 @@ public class ChatController {
 
     @Operation(tags = "AI", summary = "文本聊天")
     @PostMapping(value = "/chat")
-    public Result chat(@RequestBody String message) {
-        String result = chatClient.prompt()
-                .user(message)
-                .call()
-                .content();
+    public Flux<String> chat(@RequestBody String message) {
         System.out.println(message);
-        System.out.println(result);
-        return Result.success(result);
+        return chatClient.prompt()
+                .user(message)
+                .stream()
+                .content();
     }
 }

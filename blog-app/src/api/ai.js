@@ -1,12 +1,18 @@
 import request from '@/request'
 
-export function chat(message) {
-  return request({
-    url: '/public/ai/chat',
-    method: 'post',
+const baseUrl = 'http:/localhost:8888/'
+
+export async function chat(message) {
+  const response = await fetch(`${baseUrl}/public/ai/chat`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'text/plain'
+      "Content-Type": 'text/plain',
     },
-    data: message.trim()
-  })
+    body: message.trim(),
+  });
+
+  if (!response.body) {
+    return;
+  }
+  return response.body.getReader()
 }

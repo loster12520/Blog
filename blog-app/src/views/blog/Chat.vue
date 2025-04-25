@@ -21,7 +21,9 @@
       <div class="send-button">
         <el-button type="primary" @click="sendMessage" :disabled="isSending">
           发送
-          <el-icon v-if="isSending"><Loading /></el-icon>
+          <el-icon v-if="isSending">
+            <Loading/>
+          </el-icon>
         </el-button>
       </div>
     </div>
@@ -29,7 +31,7 @@
 </template>
 
 <script>
-import { chat } from '@/api/ai';
+import {chat} from '@/api/ai';
 
 export default {
   data() {
@@ -53,13 +55,32 @@ export default {
       this.isSending = true;
 
       try {
-        const response = await chat(this.inputValue);
+        const reader = await chat(this.inputValue);
+        const decoder = new TextDecoder();
+        const {value, done} = await reader.read()
+        const text = decoder.decode(value)
+        console.log(text)
         const serverMessage = {
           type: 'server',
-          content: response.data, // 假设后端返回的响应数据在 response.data 中
+          content: text,
           time: new Date().toLocaleTimeString(),
         };
         this.messages.push(serverMessage);
+        while (1) {
+          const {value, done} = await reader.read()
+          if (done)
+            break
+          const text = decoder.decode(value)
+          console.log(text)
+          const serverMessage = {
+            type: 'server',
+            content: text,
+            time: new Date().toLocaleTimeString(),
+          };
+          await new Promise(resolve => setTimeout(resolve, 10)); // 调整延迟时间以控制加载速度
+          this.messages.pop();
+          this.messages.push(serverMessage);
+        }
       } catch (error) {
         console.error('Error in chat:', error);
       } finally {
