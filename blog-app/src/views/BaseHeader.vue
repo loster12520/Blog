@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     details() {
-      this.$router.push("userDetail")
+      this.$router.push("/userDetail")
     },
     logout() {
       this.$store.dispatch('logout')

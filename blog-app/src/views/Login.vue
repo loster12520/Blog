@@ -71,7 +71,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #f4f5f7, #ffffff);
+  background: linear-gradient(135deg, #f4f5f780, #ffffff80);
   animation: fadeIn 1s ease-in-out;
   overflow: hidden;
 }

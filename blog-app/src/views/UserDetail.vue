@@ -147,7 +147,7 @@ export default {
           {type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur'}
         ]
       },
-      uploadAction: '/user/upload' // 替换为你的上传接口地址
+      uploadAction: '/public/upload' // 替换为你的上传接口地址
     };
   },
   methods: {
@@ -308,7 +308,7 @@ export default {
 }
 
 .avatar{
-  width: 100%;
+  width: 80%;
   height: auto;
   text-align: center;
 }

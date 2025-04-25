@@ -86,13 +86,29 @@
   }
 </script>
 <style scoped>
-/* 整体背景采用柔和渐变，并确保内容居中 */
-#login {
+/* 整体背景：浅色渐变 */
+#register {
   position: relative;
-  min-width: 100%;
-  min-height: 100%;
-  background: linear-gradient(135deg, #f4f5f7, #ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #f4f5f780, #ffffff80);
+  animation: fadeIn 1s ease-in-out;
   overflow: hidden;
+}
+
+/* 背景花纹点缀（低调，不高调） */
+#register::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='%23d0d0d0' /%3E%3C/svg%3E") repeat;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 /* 视频背景保持透明，并铺满整个屏幕 */
